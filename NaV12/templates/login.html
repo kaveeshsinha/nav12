@@ -1,0 +1,15 @@
+{% extends 'auth.html' %}
+{% block form %}
+<h2 id="form-title">Welcome back.</h2>
+<p class="muted">Your garage is waiting. Let's get you in.</p>
+<form method="post" action="{{ url_for('login') }}" class="account-form">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <label for="username">Username</label>
+  <input id="username" name="username" placeholder="Your username" autocomplete="username" maxlength="30" value="{{ request.form.get('username', '') }}" required>
+  <label for="password">Password</label>
+  <input id="password" name="password" type="password" placeholder="Your password" autocomplete="current-password" maxlength="128" required>
+  <button class="primary" type="submit">Enter your garage <span>↗</span></button>
+</form>
+<p class="switch">New to NaV12? <a href="{{ url_for('signup') }}">Create an account</a></p>
+<div class="panel-foot">BUILT FOR PEOPLE WHO LOVE CARS.</div>
+{% endblock %}

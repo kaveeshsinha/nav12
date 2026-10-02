@@ -1,0 +1,15 @@
+{% extends 'auth.html' %}
+{% block form %}
+<h2 id="form-title">Find your drive.</h2>
+<p class="muted">Join a world built around automotive passion.</p>
+<form method="post" action="{{ url_for('signup') }}" class="account-form">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <label for="username">Choose a username</label>
+  <input id="username" name="username" placeholder="e.g. night_driver" autocomplete="username" pattern="[A-Za-z0-9_]{3,30}" minlength="3" maxlength="30" aria-describedby="username-help" value="{{ request.form.get('username', '') }}" required>
+  <small id="username-help">3–30 letters, numbers, or underscores.</small>
+  <label for="password">Create a password</label>
+  <input id="password" name="password" type="password" placeholder="At least 8 characters" autocomplete="new-password" minlength="8" maxlength="128" required>
+  <button class="primary" type="submit">Create account <span>↗</span></button>
+</form>
+<p class="switch">Already part of the crew? <a href="{{ url_for('login') }}">Log in</a></p>
+{% endblock %}

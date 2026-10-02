@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ title }} · NaV12</title>
+  {% include 'styles.html' %}
+</head>
+<body>
+  <header class="site-header">
+    <a class="logo" href="{{ url_for('index') }}">NaV<span>12</span><i></i></a>
+    <span class="header-caption">FOR THE LOVE OF THE DRIVE</span>
+    <nav aria-label="Main navigation">
+      {% if session.get('username') %}
+      <form method="post" action="{{ url_for('logout') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button class="nav-button" type="submit">Log out ↗</button>
+      </form>
+      {% else %}
+      <a href="{{ url_for('login') }}">Login</a>
+      <a class="nav-button" href="{{ url_for('signup') }}">Join the garage ↗</a>
+      {% endif %}
+    </nav>
+  </header>
+  <main>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}<div class="messages" aria-live="polite">
+      {% for category, message in messages %}<div class="alert {{ category }}" role="status">{{ message }}</div>{% endfor %}
+    </div>{% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+  <footer><span>NaV12 / THE DRIVER'S COLLECTION</span><span>PASSION. PRECISION. PERFORMANCE.</span></footer>
+</body>
+</html>

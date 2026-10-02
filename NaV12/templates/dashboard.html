@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="dashboard">
+  <p class="eyebrow"><span class="dot"></span> THE GARAGE / MEMBERS AREA</p>
+  <div class="dashboard-heading"><div><h1>Welcome, <em>{{ session['username'] }}.</em></h1><p class="muted">Great cars. Better conversations. Make yourself at home.</p></div><span class="member-tag">● DRIVER CONNECTED</span></div>
+  <article class="feature">
+    <div><p class="eyebrow">THE PURSUIT OF PERFORMANCE</p><h2>Twelve cylinders.<br>One obsession.</h2><p>From the unmistakable silhouette of a Porsche to the presence of Mercedes-AMG, explore a world of automotive ambition.</p><a class="primary collection-link" href="#collection">Explore the collection <span>↓</span></a></div>
+    <div class="feature-graphic">
+      <svg class="engine" viewBox="0 0 320 260" role="img" aria-label="Stylized V12 engine illustration with two banks of six cylinders">
+        <path d="M35 35 L145 220 L175 220 L285 35" fill="none" stroke="#3b4149" stroke-width="38"/>
+        <path d="M45 35 L153 215 M275 35 L167 215" fill="none" stroke="#ff454d" stroke-width="3"/>
+        <g fill="#171c21" stroke="#ff454d" stroke-width="2">
+          <rect x="43" y="35" width="42" height="22" rx="4"/><rect x="60" y="63" width="42" height="22" rx="4"/>
+          <rect x="77" y="91" width="42" height="22" rx="4"/><rect x="94" y="119" width="42" height="22" rx="4"/>
+          <rect x="111" y="147" width="42" height="22" rx="4"/><rect x="128" y="175" width="42" height="22" rx="4"/>
+          <rect x="235" y="35" width="42" height="22" rx="4"/><rect x="218" y="63" width="42" height="22" rx="4"/>
+          <rect x="201" y="91" width="42" height="22" rx="4"/><rect x="184" y="119" width="42" height="22" rx="4"/>
+          <rect x="167" y="147" width="42" height="22" rx="4"/><rect x="150" y="175" width="42" height="22" rx="4"/>
+        </g>
+        <circle cx="160" cy="220" r="18" fill="#111518" stroke="#bcc4ca" stroke-width="4"/>
+        <text x="160" y="65" text-anchor="middle" fill="#ffffff" font-size="32" font-weight="bold">V12</text>
+      </svg><p class="engine-note">12 CYLINDERS / TWO BANKS / STYLIZED ARTWORK</p>
+    </div>
+  </article>
+  <section aria-label="Lamborghini Revuelto specifications">
+    <div class="section-title"><h2>V12 spotlight / Lamborghini Revuelto</h2></div>
+    <div class="spec-grid">
+      <div class="spec"><strong>6.5 L</strong><span>6498.5 cm³ V12</span></div>
+      <div class="spec"><strong>1015 CV</strong><span>Combined hybrid power</span></div>
+      <div class="spec"><strong>2.5 s</strong><span>0–100 km/h</span></div>
+      <div class="spec"><strong>&gt;350</strong><span>Top speed · km/h</span></div>
+    </div>
+    <p class="spec-source">Manufacturer figures. Combined power includes the electric motors, not just the V12 engine. <a href="https://www.lamborghini.com/en-en/models/revuelto-models/revuelto" target="_blank" rel="noopener noreferrer">View official specifications ↗</a></p>
+  </section>
+  <div class="section-title"><h2>The shortlist</h2><span>03 / EDITORIAL PICKS</span></div>
+  <div id="collection" class="car-grid">
+    <article class="car-card"><div class="card-top"><span>01 / PRECISION</span><span>↗</span></div><div class="card-mark">911</div><h3>Porsche</h3><p>Timeless sports-car design and a relentless fascination with the perfect corner.</p><span class="pill">THE SPORTS CAR ICON</span></article>
+    <article class="car-card"><div class="card-top"><span>02 / PRESENCE</span><span>↗</span></div><div class="card-mark">AMG</div><h3>Mercedes-AMG</h3><p>Muscular character, expressive styling, and a passion for performance.</p><span class="pill">PERFORMANCE WITH ATTITUDE</span></article>
+    <article class="car-card"><div class="card-top"><span>03 / EMOTION</span><span>↗</span></div><div class="card-mark">GT</div><h3>The grand tourer</h3><p>Long roads, sweeping curves, and the simple pleasure of taking the scenic route.</p><span class="pill">MADE FOR THE JOURNEY</span></article>
+  </div>
+  <p class="editorial-note">An enthusiast's demo collection. Brand names are used for illustrative content; NaV12 is independent.</p>
+</section>
+{% endblock %}

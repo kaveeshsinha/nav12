@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="auth-layout">
+  <div class="intro">
+    <p class="eyebrow"><span class="dot"></span> THE AUTOMOTIVE COLLECTIVE</p>
+    <h1>Life's better<br>in the <em>fast lane.</em></h1>
+    <p class="intro-copy">Iconic machines. Uncompromising design.<br>Your next obsession starts here.</p>
+    <div class="car-art" aria-hidden="true"><div class="car-body"></div><div class="wheel rear"></div><div class="wheel front"></div><div class="road"></div></div>
+    <div class="intro-bottom"><span>01 / THE PURSUIT OF PERFORMANCE</span><span>EST. 2026</span></div>
+  </div>
+  <section class="auth-panel" aria-labelledby="form-title">
+    <p class="eyebrow">YOUR ACCESS TO THE EXTRAORDINARY</p>
+    {% block form %}{% endblock %}
+  </section>
+</section>
+{% endblock %}
