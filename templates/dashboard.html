@@ -1,33 +1,264 @@
 {% extends 'base.html' %}
 {% block content %}
-<section class="dashboard">
+<div class="dashboard-layout">
+
+    <aside class="car-sidebar">
+        <div class="sidebar-title">
+            <h3>CAR BRANDS</h3>
+
+            <span class="brand-search-icon" aria-label="Search car brands">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="11" cy="11" r="6"></circle>
+                    <path d="M16 16L21 21"></path>
+                </svg>
+            </span>
+        </div>
+        <a href="#">Ferrari</a>
+        <a href="#">Lamborghini</a>
+        <a href="#">Porsche</a>
+        <a href="#">Mercedes</a>
+        <a href="#">BMW</a>
+        <a href="#">Audi</a>
+        <a href="#">McLaren</a>
+        <a href="#">Aston Martin</a>
+        <a href="#">Bentley</a>
+        <a href="#">Bugatti</a>
+    </aside>
+
+    <section class="dashboard">
   <p class="eyebrow"><span class="dot"></span> THE GARAGE / MEMBERS AREA</p>
   <div class="dashboard-heading"><div><h1>Welcome, <em>{{ session['username'] }}.</em></h1><p class="muted">Great cars. Better conversations. Make yourself at home.</p></div><span class="member-tag">● DRIVER CONNECTED</span></div>
   <article class="feature">
     <div><p class="eyebrow">THE PURSUIT OF PERFORMANCE</p><h2>Twelve cylinders.<br>One obsession.</h2><p>From the unmistakable silhouette of a Porsche to the presence of Mercedes-AMG, explore a world of automotive ambition.</p><a class="primary collection-link" href="#collection">Explore the collection <span>↓</span></a></div>
     <div class="feature-graphic">
-      <svg class="engine" viewBox="0 0 320 260" role="img" aria-label="Stylized V12 engine illustration with two banks of six cylinders">
-        <path d="M35 35 L145 220 L175 220 L285 35" fill="none" stroke="#3b4149" stroke-width="38"/>
-        <path d="M45 35 L153 215 M275 35 L167 215" fill="none" stroke="#ff454d" stroke-width="3"/>
-        <g fill="#171c21" stroke="#ff454d" stroke-width="2">
-          <rect x="43" y="35" width="42" height="22" rx="4"/><rect x="60" y="63" width="42" height="22" rx="4"/>
-          <rect x="77" y="91" width="42" height="22" rx="4"/><rect x="94" y="119" width="42" height="22" rx="4"/>
-          <rect x="111" y="147" width="42" height="22" rx="4"/><rect x="128" y="175" width="42" height="22" rx="4"/>
-          <rect x="235" y="35" width="42" height="22" rx="4"/><rect x="218" y="63" width="42" height="22" rx="4"/>
-          <rect x="201" y="91" width="42" height="22" rx="4"/><rect x="184" y="119" width="42" height="22" rx="4"/>
-          <rect x="167" y="147" width="42" height="22" rx="4"/><rect x="150" y="175" width="42" height="22" rx="4"/>
+
+    <svg class="v12-pro" viewBox="0 0 640 420"
+         xmlns="http://www.w3.org/2000/svg"
+         role="img"
+         aria-label="Stylized three dimensional V12 engine">
+
+    <defs>
+
+        <linearGradient id="metalTop" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#747e84"/>
+            <stop offset=".22" stop-color="#3a4247"/>
+            <stop offset=".7" stop-color="#171c1f"/>
+            <stop offset="1" stop-color="#080b0d"/>
+        </linearGradient>
+
+        <linearGradient id="metalSide" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#343b40"/>
+            <stop offset="1" stop-color="#090c0e"/>
+        </linearGradient>
+
+        <linearGradient id="redMetal" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#ff7b80"/>
+            <stop offset=".4" stop-color="#ff454d"/>
+            <stop offset="1" stop-color="#7e1117"/>
+        </linearGradient>
+
+        <radialGradient id="pulley">
+            <stop offset="0" stop-color="#9ca7ad"/>
+            <stop offset=".25" stop-color="#49535a"/>
+            <stop offset=".7" stop-color="#171c20"/>
+            <stop offset="1" stop-color="#050708"/>
+        </radialGradient>
+
+        <filter id="shadow">
+            <feDropShadow dx="0" dy="18" stdDeviation="18"
+                          flood-color="#000" flood-opacity=".7"/>
+        </filter>
+
+    </defs>
+
+    <!-- floor -->
+    <ellipse cx="320" cy="352" rx="210" ry="30"
+             fill="#000" opacity=".45"/>
+
+    <g filter="url(#shadow)">
+
+        <!-- lower block -->
+        <path d="M170 225
+                 L320 285
+                 L470 225
+                 L438 310
+                 L320 365
+                 L202 310 Z"
+              fill="url(#metalSide)"
+              stroke="#495259"
+              stroke-width="2"/>
+
+        <!-- left bank -->
+        <path d="M125 118
+                 L260 174
+                 L289 278
+                 L170 229 Z"
+              fill="url(#metalTop)"
+              stroke="#687279"
+              stroke-width="2"/>
+
+        <!-- right bank -->
+        <path d="M515 118
+                 L380 174
+                 L351 278
+                 L470 229 Z"
+              fill="url(#metalTop)"
+              stroke="#687279"
+              stroke-width="2"/>
+
+        <!-- central valley -->
+        <path d="M260 174
+                 L320 132
+                 L380 174
+                 L351 278
+                 L320 296
+                 L289 278 Z"
+              fill="#101519"
+              stroke="#505960"
+              stroke-width="2"/>
+
+        <!-- left red cover -->
+        <path d="M143 128
+                 L239 168
+                 L255 203
+                 L159 164 Z"
+              fill="url(#redMetal)"/>
+
+        <!-- right red cover -->
+        <path d="M497 128
+                 L401 168
+                 L385 203
+                 L481 164 Z"
+              fill="url(#redMetal)"/>
+
+        <!-- LEFT INTAKE PORTS -->
+        <g fill="#090c0e" stroke="#8b969c" stroke-width="2">
+
+            <ellipse cx="182" cy="178" rx="18" ry="10"
+                     transform="rotate(21 182 178)"/>
+
+            <ellipse cx="202" cy="188" rx="18" ry="10"
+                     transform="rotate(21 202 188)"/>
+
+            <ellipse cx="222" cy="198" rx="18" ry="10"
+                     transform="rotate(21 222 198)"/>
+
+            <ellipse cx="242" cy="208" rx="18" ry="10"
+                     transform="rotate(21 242 208)"/>
+
+            <ellipse cx="262" cy="218" rx="18" ry="10"
+                     transform="rotate(21 262 218)"/>
+
+            <ellipse cx="280" cy="228" rx="18" ry="10"
+                     transform="rotate(21 280 228)"/>
+
         </g>
-        <circle cx="160" cy="220" r="18" fill="#111518" stroke="#bcc4ca" stroke-width="4"/>
-        <text x="160" y="65" text-anchor="middle" fill="#ffffff" font-size="32" font-weight="bold">V12</text>
-      </svg><p class="engine-note">12 CYLINDERS / TWO BANKS / STYLIZED ARTWORK</p>
+
+        <!-- RIGHT INTAKE PORTS -->
+        <g fill="#090c0e" stroke="#8b969c" stroke-width="2">
+
+            <ellipse cx="458" cy="178" rx="18" ry="10"
+                     transform="rotate(-21 458 178)"/>
+
+            <ellipse cx="438" cy="188" rx="18" ry="10"
+                     transform="rotate(-21 438 188)"/>
+
+            <ellipse cx="418" cy="198" rx="18" ry="10"
+                     transform="rotate(-21 418 198)"/>
+
+            <ellipse cx="398" cy="208" rx="18" ry="10"
+                     transform="rotate(-21 398 208)"/>
+
+            <ellipse cx="378" cy="218" rx="18" ry="10"
+                     transform="rotate(-21 378 218)"/>
+
+            <ellipse cx="360" cy="228" rx="18" ry="10"
+                     transform="rotate(-21 360 228)"/>
+
+        </g>
+
+        <!-- central engine cover -->
+        <path d="M280 160
+                 L320 141
+                 L360 160
+                 L348 236
+                 L320 253
+                 L292 236 Z"
+              fill="url(#metalTop)"
+              stroke="#737e84"
+              stroke-width="2"/>
+
+        <!-- V12 badge -->
+        <path d="M294 176
+                 L320 165
+                 L346 176
+                 L340 211
+                 L320 221
+                 L300 211 Z"
+              fill="#080b0d"
+              stroke="#ff454d"
+              stroke-width="2"/>
+
+        <text x="320"
+              y="199"
+              text-anchor="middle"
+              fill="#fff"
+              font-size="19"
+              font-weight="900"
+              font-family="Arial">
+            V12
+        </text>
+
+        <!-- front assembly -->
+        <path d="M245 278
+                 L320 312
+                 L395 278
+                 L381 323
+                 L320 351
+                 L259 323 Z"
+              fill="#11171a"
+              stroke="#515b61"
+              stroke-width="2"/>
+
+        <!-- pulley -->
+        <circle cx="320" cy="313" r="36"
+                fill="url(#pulley)"
+                stroke="#818c92"
+                stroke-width="3"/>
+
+        <circle cx="320" cy="313" r="22"
+                fill="#090c0e"
+                stroke="#ff454d"
+                stroke-width="3"/>
+
+        <circle cx="320" cy="313" r="7"
+                fill="#98a3a9"/>
+
+    </g>
+
+    <!-- subtle highlights -->
+    <path d="M132 117 L257 169"
+          stroke="#fff"
+          stroke-opacity=".15"/>
+
+    <path d="M508 117 L383 169"
+          stroke="#fff"
+          stroke-opacity=".15"/>
+
+    </svg>
+
+    <p class="engine-note">
+        V12 / NATURALLY ASPIRATED ARCHITECTURE
+    </p>
+
     </div>
   </article>
   <section aria-label="Lamborghini Revuelto specifications">
-    <div class="section-title"><h2>V12 spotlight / Lamborghini Revuelto</h2></div>
+    <div class="section-title"><h2>The Naturally aspirated V12 / Ferrari 812 Superfast</h2></div>
     <div class="spec-grid">
-      <div class="spec"><strong>6.5 L</strong><span>6498.5 cm³ V12</span></div>
-      <div class="spec"><strong>1015 CV</strong><span>Combined hybrid power</span></div>
-      <div class="spec"><strong>2.5 s</strong><span>0–100 km/h</span></div>
+      <div class="spec"><strong>6.5 L</strong><span>6496 cm³ V12</span></div>
+      <div class="spec"><strong>789 hp</strong><span>at 8,500 rpm</span></div>
+      <div class="spec"><strong>2.9 s</strong><span>0–100 km/h</span></div>
       <div class="spec"><strong>&gt;350</strong><span>Top speed · km/h</span></div>
     </div>
     <p class="spec-source">Manufacturer figures. Combined power includes the electric motors, not just the V12 engine. <a href="https://www.lamborghini.com/en-en/models/revuelto-models/revuelto" target="_blank" rel="noopener noreferrer">View official specifications ↗</a></p>
@@ -39,5 +270,6 @@
     <article class="car-card"><div class="card-top"><span>03 / EMOTION</span><span>↗</span></div><div class="card-mark">GT</div><h3>The grand tourer</h3><p>Long roads, sweeping curves, and the simple pleasure of taking the scenic route.</p><span class="pill">MADE FOR THE JOURNEY</span></article>
   </div>
   <p class="editorial-note">An enthusiast's demo collection. Brand names are used for illustrative content; NaV12 is independent.</p>
-</section>
-{% endblock %}
+    </section>
+    </div>
+    {% endblock %}

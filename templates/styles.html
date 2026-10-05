@@ -3,4 +3,457 @@
 
 .spec-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:22px 0}.spec{background:#19191d;border:1px solid var(--line);padding:24px}.spec strong{display:block;font-size:30px;letter-spacing:-1px}.spec span{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}.engine{width:100%;max-width:320px;height:auto}.feature-graphic{transform:none}.spec-source{font-size:11px;color:var(--muted)}.spec-source a{color:var(--accent);text-decoration:underline}.engine-note{font-size:9px;color:var(--muted);letter-spacing:1px}@media(max-width:650px){.spec-grid{grid-template-columns:repeat(2,1fr)}}
 
+/* ===== FLOATING CAR BRAND MENU ===== */
+
+.dashboard-layout{
+    position:relative;
+    display:block;
+}
+
+/* Keep normal dashboard position */
+.dashboard-layout .dashboard{
+    margin-left:auto;
+    margin-right:auto;
+}
+
+/* Floating sidebar */
+.car-sidebar{
+    position:absolute;
+    top:35px;
+    left:0;
+
+    width:55px;
+    max-height:500px;
+
+    background:#101518;
+    border:1px solid var(--line);
+    border-left:0;
+
+    padding:18px 8px;
+
+    overflow:hidden;
+    white-space:nowrap;
+
+    z-index:100;
+
+    transition:width 0.25s ease;
+}
+
+/* Expand on hover */
+.car-sidebar:hover{
+    width:210px;
+}
+
+/* Heading */
+.car-sidebar h3{
+    color:var(--accent);
+    font-size:10px;
+    letter-spacing:1.5px;
+
+    margin:0 0 15px;
+    padding-left:5px;
+}
+
+/* Hide company names normally */
+.car-sidebar a{
+    display:block;
+
+    padding:10px 12px;
+
+    color:var(--text);
+    font-size:13px;
+
+    opacity:0;
+    transform:translateX(-10px);
+
+    transition:
+        opacity 0.2s ease,
+        transform 0.2s ease,
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+/* Reveal names */
+.car-sidebar:hover a{
+    opacity:1;
+    transform:translateX(0);
+}
+
+/* Individual car hover */
+.car-sidebar a:hover{
+    background:rgba(255,255,255,0.07);
+    color:var(--accent);
+}
+
+
+/* Mobile */
+@media(max-width:800px){
+
+    .car-sidebar{
+        position:relative;
+        top:auto;
+        left:auto;
+
+        width:100%;
+        max-height:none;
+
+        display:flex;
+        overflow-x:auto;
+
+        padding:12px;
+    }
+
+    .car-sidebar:hover{
+        width:100%;
+    }
+
+    .car-sidebar h3{
+        display:none;
+    }
+
+    .car-sidebar a{
+        opacity:1;
+        transform:none;
+        white-space:nowrap;
+    }
+}
+/* ===== FINAL SIDEBAR FIX ===== */
+
+.dashboard-layout{
+    display:block !important;
+    position:relative;
+    width:100%;
+}
+
+/* Keep the dashboard exactly where it originally was */
+.dashboard-layout .dashboard{
+    max-width:1280px;
+    margin:0 auto !important;
+    padding:48px 5%;
+}
+
+/* Collapsed menu */
+.car-sidebar{
+    position:absolute !important;
+    top:35px;
+    left:18px;
+
+    width:128px !important;
+    height:52px;
+    max-height:52px;
+
+    padding:0;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(32,39,43,0.96),
+            rgba(15,20,23,0.98)
+        );
+
+    border:1px solid rgba(255,255,255,0.10);
+
+    /* Apple-like continuous corner */
+    border-radius:17px;
+    corner-shape:squircle;
+
+    box-shadow:
+        0 8px 24px rgba(0,0,0,0.30),
+        inset 0 1px 0 rgba(255,255,255,0.08),
+        inset 0 -1px 0 rgba(0,0,0,0.25);
+
+    overflow:hidden;
+    z-index:1000;
+
+    transition:
+        width 0.28s cubic-bezier(.2,.8,.2,1),
+        max-height 0.28s cubic-bezier(.2,.8,.2,1),
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+}
+
+/* Small visible button */
+.car-sidebar h3{
+    height:52px;
+    margin:0;
+    padding:0 18px;
+
+    display:flex;
+    align-items:center;
+
+    color:var(--accent);
+    font-size:10px;
+    font-weight:700;
+    letter-spacing:1.7px;
+
+    white-space:nowrap;
+}
+
+/* Menu icon */
+
+/* Completely collapse car links */
+.car-sidebar a{
+    display:block;
+
+    margin:3px 8px;
+    padding:10px 12px;
+
+    border-radius:11px;
+    corner-shape:squircle;
+
+    color:var(--text);
+    font-size:13px;
+
+    opacity:0;
+    visibility:hidden;
+    transform:translateX(-8px);
+
+    transition:
+        opacity .18s ease,
+        transform .18s ease,
+        background .15s ease,
+        color .15s ease;
+}
+
+/* Expand menu */
+.car-sidebar:hover{
+    width:220px !important;
+    height:auto;
+    max-height:500px;
+
+    border-radius:22px;
+    corner-shape:squircle;
+
+    box-shadow:
+        0 16px 40px rgba(0,0,0,0.42),
+        inset 0 1px 0 rgba(255,255,255,0.10);
+
+    transform:translateY(-1px);
+}
+
+/* Show title when expanded */
+.car-sidebar:hover h3{
+    width:100%;
+    justify-content:flex-start;
+    padding-left:16px;
+
+    font-size:10px;
+    letter-spacing:2px;
+}
+
+/* Remove hamburger while expanded */
+
+
+/* Reveal brands */
+.car-sidebar:hover a{
+    opacity:1;
+    visibility:visible;
+    transform:translateX(0);
+}
+
+.car-sidebar a:hover{
+    background:#171d21;
+    color:var(--accent);
+}
+
+/* Mobile */
+@media(max-width:800px){
+
+    .car-sidebar{
+        position:relative !important;
+        top:auto;
+        width:48px !important;
+    }
+
+    .dashboard-layout .dashboard{
+        margin:0 auto !important;
+    }
+}
+/* ==================================================
+   NAV12 — APPLE-STYLE SQUIRCLE SYSTEM
+   ================================================== */
+
+/* Large containers */
+.feature,
+.car-card,
+.spec{
+    border-radius:24px;
+    corner-shape:squircle;
+}
+
+/* Feature hero */
+.feature{
+    overflow:hidden;
+}
+
+/* Individual specification boxes */
+.spec{
+    overflow:hidden;
+}
+
+/* Car cards */
+.car-card{
+    overflow:hidden;
+}
+
+/* Buttons */
+.primary,
+.nav-button{
+    border-radius:14px;
+    corner-shape:squircle;
+}
+
+/* Login / signup input boxes */
+.account-form input{
+    border-radius:14px;
+    corner-shape:squircle;
+
+    padding:14px 16px;
+}
+
+/* Success / error messages */
+.alert{
+    border-radius:16px;
+    corner-shape:squircle;
+}
+
+/* DRIVER CONNECTED box */
+.member-tag{
+    border-radius:12px;
+    corner-shape:squircle;
+}
+
+/* Car Brands floating menu */
+.car-sidebar{
+    border-radius:18px;
+    corner-shape:squircle;
+}
+
+/* Individual company rows */
+.car-sidebar a{
+    border-radius:12px;
+    corner-shape:squircle;
+}
+
+/* Small logo square */
+.logo i{
+    border-radius:4px;
+    corner-shape:squircle;
+}
+/* ===== CAR BRAND SEARCH ICON ===== */
+
+.sidebar-title{
+    height:52px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding-right:16px;
+}
+
+.sidebar-title h3{
+    margin:0;
+}
+
+.brand-search-icon{
+    width:30px;
+    height:30px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:10px;
+    corner-shape:squircle;
+
+    background:rgba(255,255,255,0.06);
+
+    opacity:0;
+    visibility:hidden;
+    transform:scale(.85);
+
+    transition:
+        opacity .2s ease,
+        transform .2s ease,
+        background .2s ease;
+}
+
+.car-sidebar:hover .brand-search-icon{
+    opacity:1;
+    visibility:visible;
+    transform:scale(1);
+}
+
+.brand-search-icon:hover{
+    background:rgba(255,255,255,0.12);
+}
+
+.brand-search-icon svg{
+    width:15px;
+    height:15px;
+
+    fill:none;
+    stroke:var(--text);
+    stroke-width:2;
+    stroke-linecap:round;
+}
+.v12-pro{
+    width:100%;
+    max-width:600px;
+    height:auto;
+
+    filter:
+        drop-shadow(0 28px 32px rgba(0,0,0,.42));
+
+    transform:
+        perspective(1000px)
+        rotateX(4deg);
+
+    transition:
+        transform .45s cubic-bezier(.2,.8,.2,1);
+}
+
+.feature:hover .v12-pro{
+    transform:
+        perspective(1000px)
+        rotateX(1deg)
+        translateY(-6px)
+        scale(1.025);
+}
+
+.feature-graphic{
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+
+    min-height:390px;
+
+    overflow:hidden;
+
+    background:
+        radial-gradient(
+            circle at 50% 48%,
+            rgba(255,69,77,.09),
+            transparent 38%
+        ),
+        linear-gradient(
+            145deg,
+            #151b1f,
+            #090d0f
+        );
+
+    border-radius:28px;
+    corner-shape:squircle;
+}
+
+.engine-note{
+    margin:-10px 0 18px;
+
+    font-size:9px;
+    font-weight:700;
+    letter-spacing:2.2px;
+
+    color:#7f8b91;
+}
 </style>
