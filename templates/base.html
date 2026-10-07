@@ -8,10 +8,12 @@
 </head>
 <body>
   <header class="site-header">
-    <a class="logo" href="{{ url_for('index') }}">NaV<span>12</span><i></i></a>
-    <span class="header-caption">FOR THE LOVE OF THE DRIVE</span>
+      <a class="logo" href="{{ url_for('index') }}">NaV<span>12</span></a>
     <nav aria-label="Main navigation">
       {% if session.get('username') %}
+
+      <span class="member-tag">● DRIVER CONNECTED</span>
+
       <form method="post" action="{{ url_for('logout') }}">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <button class="nav-button" type="submit">Log out ↗</button>
