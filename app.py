@@ -228,6 +228,11 @@ def dashboard():
     return render_template('dashboard.html', title='Your garage')
 
 
+# Catalogue registration does not alter account or storage configuration.
+from collection import register_collection
+register_collection(app, login_required)
+
+
 @app.post('/logout')
 def logout():
     session.clear()
@@ -242,9 +247,11 @@ def prevent_cached_accounts(response):
     response.headers['X-Content-Type-Options'] = 'nosniff'
     response.headers['X-Frame-Options'] = 'DENY'
     response.headers['Referrer-Policy'] = 'same-origin'
+    # Only gallery-enabled member pages may execute our local enhancement script.
+    scripts = "'self'" if request.endpoint == 'dashboard' or (request.endpoint or '').startswith('collection.') else "'none'"
     response.headers['Content-Security-Policy'] = (
         "default-src 'self'; style-src 'self' 'unsafe-inline'; "
-        "img-src 'self'; script-src 'none'; object-src 'none'; "
+        f"img-src 'self'; script-src {scripts}; object-src 'none'; "
         "base-uri 'self'; frame-ancestors 'none'; form-action 'self'"
     )
     if production:
