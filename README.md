@@ -1,3 +1,7 @@
+> **Latest local update:** see [NAVIGATION-UPDATE.md](NAVIGATION-UPDATE.md) for the horizontal sections, engine guides, Linux setup and tests.
+
+> **Local Car Collection update:** see [COLLECTION-UPDATE.md](COLLECTION-UPDATE.md) for the current feature, safe setup, test results, media sources, limitations and rollback. The deployment guide below describes the original baseline; no deployment was performed.
+
 # NaV12 — public deployment edition
 
 Complete Flask/OpenPyXL code, dark/red automotive UI, embedded CSS, an original inline SVG engine illustration, signup/login/logout, and manufacturer-sourced V12 statistics. Python 3.11+ on Linux/macOS; on Windows use WSL. This is a hardened small-app starter, not a claim that Excel is a scalable production identity store.

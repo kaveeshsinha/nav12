@@ -1,0 +1,58 @@
+NAV12 primary specification audit — 2026-10-13
+Scope: numeric specifications and original variant/year identification. Manufacturer primary sources only. Indexed manufacturer text used where full retrieval failed. No image mappings changed.
+Changes:
+aston-martin-db12: displacement 3,982 cm³ -> Not verified (no exact-variant primary cc value retrieved).
+bentley-continental-gt-speed: displacement 5,950 cm³ -> Not verified (no exact-variant primary cc value retrieved).
+bugatti-chiron: displacement 7,993 cm³ -> Not verified (no exact-variant primary cc value retrieved).
+bugatti-chiron: acceleration <2.5 -> Not verified (2016 launch claim not found in accessible source; later retrospective says2.4).
+Ferrari >340,800 at8500rpm,718Nm at7000rpm retained and supported by launch press PDF. Added5CV ram-effect qualification.
+DB12 launch source replaced incomplete date URL with exact manufacturer press article.
+Every record now has verification_note; supporting extra_source added or strengthened where needed.
+
+ferrari-812-superfast: Launch figures checked against Ferrari’s indexed 16 February 2017 release and press PDF. The launch claim is greater than 340 km/h. Power includes the stated 5 CV ram effect. Full webpage requires a JavaScript challenge.
+Source: https://www.ferrari.com/en-US/corporate/articles/the-ferrari-812-superfast-the-new-extreme-performance-v12-berlinetta
+Supporting source: https://cdn.ferrari.com/cms/network/media/pdf/cs_ferrari_812_superfast_gbr.pdf
+
+lamborghini-revuelto: Checked against Lamborghini’s model specifications and digital brochure. Power is combined system output; torque is V12 output only. The 2023 launch date is supported by manufacturer news; brochure accessible through indexed text.
+Source: https://www.lamborghini.com/en-en/models/revuelto-models/revuelto
+Supporting source: https://www.lamborghini.com/sites/it-en/files/DAM/lamborghini/facelift_2019/model_detail/revuelto/2024/brochure/06_24/REVUELTO_DIGITAL_BROCHURE_EN_2024.pdf
+
+porsche-911-gt3: Checked against 2021 Porsche Newsroom and the February 2021 PDK technical sheet. Values apply to 992.1 PDK, not manual, Touring-specific equipment or the later 992.2. PDF extraction was limited; indexed technical text was available.
+Source: https://newsroom.porsche.com/en/2021/products/porsche-911-gt3-world-premiere-livestream-23624.html
+Supporting source: https://newsroom.porsche.com/dam/jcr%3A15fa49de-7fc3-4770-a09d-1b8bf451ddbd/PAG-992-911GT3-PDK-EN.pdf
+
+mercedes-amg-gt-63: Checked against the indexed 19 August 2023 German launch release and technical table for the two-door GT 63 4MATIC+. Torque RPM is omitted because the source prose and table disagree about the upper RPM limit.
+Source: https://media.mercedes-benz.com/article/a2d225e1-816a-462c-b78a-071ae23a6031
+Supporting source: same launch source
+
+bmw-m4-competition: Checked against the readable 9 March 2021 UK launch release and BMW’s 2021 technical tables. Rear-wheel-drive Competition specification, with the standard 250 km/h electronic limiter; optional higher limit excluded.
+Source: https://www.press.bmwgroup.com/united-kingdom/article/detail/T0327319EN_GB
+Supporting source: https://www.press.bmwgroup.com/global/article/detail/T0321410EN/specifications-of-the-bmw-m4-coup%C3%A9-and-the-bmw-m4-competition-coup%C3%A9-valid-from-09/2020
+
+audi-r8-performance: Checked against Audi’s June 2019 facts, engine and transmission pages and indexed 2019 technical material. These are facelift performance quattro coupé figures; later engine RPM updates and RWD/Spyder variants are excluded.
+Source: https://www.audi.com/en/the-audi-r8-until-2024-updated-dynamics-for-the-high-performance-sports-car-11734/facts-and-figures-11736
+Supporting source: https://www.audi.com/en/the-audi-r8-until-2024-updated-dynamics-for-the-high-performance-sports-car-11734/engine-11738
+
+mclaren-750s: Checked against indexed McLaren model specifications. 750 PS is metric horsepower; manufacturer listings also report 552 kW and 3,994 cm³. Current page extraction is limited; indexed specification text supplies performance and seven-speed SSG details.
+Source: https://cars.mclaren.com/us_en/750s
+Supporting source: https://www.mclaren.com/cars/gl_en/post/750s-five-key-facts
+
+aston-martin-db12: Launch year, engine, output, torque RPM, acceleration, speed and transmission checked against Aston Martin’s 2023 release and readable DB12 model page. Exact cubic-centimetre displacement: Not verified in accessible primary material.
+Source: https://media.astonmartin.com/introducing-the-aston-martin-db12the-worlds-first-super-tourer/?lang=eng
+Supporting source: https://www.astonmartin.com/en-us/models/db12
+
+bentley-continental-gt-speed: Checked against Bentley’s indexed 23 March 2021 coupé launch release: W12, 659 PS, 900 Nm, 3.6 seconds, 335 km/h and eight-speed dual-clutch transmission. Exact cubic-centimetre displacement: Not verified in accessible primary material.
+Source: https://www.bentleymedia.com/en/newsitem/1200-the-most-dynamic-bentley-road-car-in-history-the-new-continental-gt-speed
+Supporting source: https://www.bentleymedia.com/en/models/continental-gt
+
+bugatti-chiron: Original model and drivetrain checked against Bugatti’s readable 29 February 2016 launch release. Exact cubic-centimetre displacement and original launch acceleration claim: Not verified. A later manufacturer retrospective reports 2.4 seconds, not a contemporaneous launch figure.
+Source: https://newsroom.bugatti.com/en/press-releases/bugatti-chiron-celebrates-its-debut-in
+Supporting source: https://newsroom.bugatti.com/press-releases/geneva-international-motor-show-2016
+
+Additional evidence:
+Porsche torque470Nm: https://newsroom.porsche.com/en_AU/2021/products/porsche-911-gt3-technical-fine-tuning-performance-enhancement-24126.html
+BMW2993cc/510PS/650Nm/250kmh/3.9s official technical tables: https://www.press.bmwgroup.com/france/article/attachment/T0338218FR/489089
+McLaren552kW/3994cc: https://preowned-eu.mclaren.com/eu/es/en/vehicles/mclaren-750s-qualified-qbdupwfq (do not use dealer dimensions or conflicting acceleration for other stock).
+Bugatti retrospective2.4s: https://newsroom.bugatti.com/press-releases/bugatti-eb110-veyron-chiron-trilogy-of-modern-bugatti
+Audi2019 technical download: https://www.audi-mediacenter.com/en/the-audi-r8-until-2024-updated-dynamics-for-the-high-performance-sports-car-11734/download
+Transmission corroborationFerrari: https://preowned.ferrari.com/en-EN/a/north-america/used-ferrari/usa/ferrari-of-washington-/812-superfast/ZFF83CLA2K0243569-1767969512335

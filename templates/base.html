@@ -5,8 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ title }} · NaV12</title>
   {% include 'styles.html' %}
+  <link rel="icon" href="{{ url_for('static', filename='favicon.svg') }}" type="image/svg+xml">
+  {% block head_extra %}{% endblock %}
 </head>
-<body>
+<body class="{% block body_class %}{% endblock %}">
   <header class="site-header">
       <a class="logo" href="{{ url_for('index') }}">NaV<span>12</span></a>
     <nav aria-label="Main navigation">
@@ -16,7 +18,7 @@
 
       <form method="post" action="{{ url_for('logout') }}">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-        <button class="nav-button" type="submit">Log out ↗</button>
+        <button class="nav-button" type="submit">Log out</button>
       </form>
       {% else %}
       <a href="{{ url_for('login') }}">Login</a>
@@ -24,7 +26,7 @@
       {% endif %}
     </nav>
   </header>
-  <main>
+  <main id="main-content">
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}<div class="messages" aria-live="polite">
       {% for category, message in messages %}<div class="alert {{ category }}" role="status">{{ message }}</div>{% endfor %}
@@ -33,5 +35,6 @@
     {% block content %}{% endblock %}
   </main>
   <footer><span>NaV12 / THE DRIVER'S COLLECTION</span><span>PASSION. PRECISION. PERFORMANCE.</span></footer>
+  {% block scripts %}{% endblock %}
 </body>
 </html>

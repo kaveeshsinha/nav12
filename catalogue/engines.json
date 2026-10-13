@@ -1,0 +1,201 @@
+[
+  {
+    "slug": "na-v12",
+    "name": "Naturally aspirated V12",
+    "short_name": "NA V12",
+    "code": "V12",
+    "group": "Signature combinations",
+    "selectors": {
+      "engine_layout": "v12",
+      "induction": "naturally-aspirated"
+    },
+    "description": "Twelve cylinders in two banks, drawing air without a turbocharger or supercharger. A defining configuration for some of the most celebrated performance engines.",
+    "note": "NA means naturally aspirated. Electric assistance does not change the combustion engine’s induction: the Revuelto combines an NA V12 with electric motors.",
+    "source": "https://www.ferrari.com/en-US/corporate/articles/the-ferrari-812-superfast-the-new-extreme-performance-v12-berlinetta",
+    "source_name": "Ferrari · 812 Superfast launch"
+  },
+  {
+    "slug": "twin-turbo-v12",
+    "name": "Twin-turbo V12",
+    "short_name": "Twin-turbo V12",
+    "code": "V12+",
+    "group": "Signature combinations",
+    "selectors": {
+      "engine_layout": "v12",
+      "induction": "turbocharged",
+      "turbo_count": 2
+    },
+    "description": "A V12 paired with two turbochargers. Exhaust energy drives the turbines, which power compressors that feed more air into the engine.",
+    "note": "The 2024 Aston Martin Vanquish is an example of this configuration. It is a reference here, not a model in the current collection.",
+    "source": "https://media.astonmartin.com/aston-martin-vanquish-an-icon-returns-to-reign-supreme/?lang=eng",
+    "source_name": "Aston Martin · Vanquish launch"
+  },
+  {
+    "slug": "v12",
+    "name": "V12 engines",
+    "short_name": "V12",
+    "code": "V12",
+    "group": "Cylinder layouts",
+    "selectors": {
+      "engine_layout": "v12"
+    },
+    "description": "Twelve cylinders arranged in two banks of six around a common crankshaft. The V describes the arrangement, not how the engine is supplied with air.",
+    "note": "A V12 can be naturally aspirated or turbocharged. Choose a signature combination above to explore one approach.",
+    "source": "https://www.lamborghini.com/en-en/models/revuelto-models/revuelto",
+    "source_name": "Lamborghini · Revuelto"
+  },
+  {
+    "slug": "v10",
+    "name": "V10 engines",
+    "short_name": "V10",
+    "code": "V10",
+    "group": "Cylinder layouts",
+    "selectors": {
+      "engine_layout": "v10"
+    },
+    "description": "Ten cylinders arranged in two banks of five. This layout sits between the more familiar V8 and V12 in cylinder count.",
+    "note": "The R8 performance in this collection uses a naturally aspirated V10. Cylinder count alone does not tell you an engine’s power.",
+    "source": "https://www.audi.com/en/the-audi-r8-until-2024-updated-dynamics-for-the-high-performance-sports-car-11734/facts-and-figures-11736",
+    "source_name": "Audi · R8 facts and figures"
+  },
+  {
+    "slug": "v8",
+    "name": "V8 engines",
+    "short_name": "V8",
+    "code": "V8",
+    "group": "Cylinder layouts",
+    "selectors": {
+      "engine_layout": "v8"
+    },
+    "description": "Eight cylinders arranged in two banks of four. Different crankshafts, induction systems and tuning give V8 engines very different personalities.",
+    "note": "The three V8 models in this collection use twin turbochargers. V8 engines are not inherently turbocharged.",
+    "source": "https://media.astonmartin.com/introducing-the-aston-martin-db12the-worlds-first-super-tourer/?lang=eng",
+    "source_name": "Aston Martin · DB12 launch"
+  },
+  {
+    "slug": "v6",
+    "name": "V6 engines",
+    "short_name": "V6",
+    "code": "V6",
+    "group": "Cylinder layouts",
+    "selectors": {
+      "engine_layout": "v6"
+    },
+    "description": "Six cylinders arranged in two banks of three. A V6 and an inline-six have the same cylinder count, but a different physical layout.",
+    "note": "The Ferrari 296 GTB’s twin-turbo V6 works with an electric motor. It is a reference example; the 296 is not in the current collection.",
+    "source": "https://yasa.com/applications/ferrari-296gtb/",
+    "source_name": "YASA · Ferrari 296 GTB powertrain"
+  },
+  {
+    "slug": "flat-six",
+    "name": "Flat-six engines",
+    "short_name": "Flat-six",
+    "code": "F6",
+    "group": "Cylinder layouts",
+    "selectors": {
+      "engine_layout": "flat-six"
+    },
+    "description": "Six cylinders arranged in two horizontally opposed banks. The boxer configuration used by Porsche places its cylinders low in the car.",
+    "note": "Flat describes the layout. It does not mean naturally aspirated: the GT3 here is NA, while other flat-six engines use turbocharging.",
+    "source": "https://newsroom.porsche.com/en_US/technology/porsche-flat-engine-sports-car-tradition-design-principle-internal-combustion-engine-lightweight-power-dynamic-15767.html",
+    "source_name": "Porsche · The flat engine tradition"
+  },
+  {
+    "slug": "inline-six",
+    "name": "Inline-six engines",
+    "short_name": "Inline-six",
+    "code": "I6",
+    "group": "Cylinder layouts",
+    "selectors": {
+      "engine_layout": "inline-six"
+    },
+    "description": "Six cylinders in a single straight row. Also called a straight-six, this architecture is distinct from a V6.",
+    "note": "The M4 Competition in this collection uses a twin-turbo inline-six. BMW’s TwinPower Turbo branding does not change that layout.",
+    "source": "https://www.bmw-m.com/en/topics/magazine-article-pool/bmw-m3-m4-motordetails.html",
+    "source_name": "BMW M · M3 and M4 engine details"
+  },
+  {
+    "slug": "inline-four",
+    "name": "Inline-four engines",
+    "short_name": "Inline-four",
+    "code": "I4",
+    "group": "Cylinder layouts",
+    "selectors": {
+      "engine_layout": "inline-four"
+    },
+    "description": "Four cylinders in a single straight row. A widely used layout that can be naturally aspirated or fitted with forced induction.",
+    "note": "Cylinder count is one part of the story. Capacity, boost, engine speed and tuning also shape its output and response.",
+    "source": "https://www.press.bmwgroup.com/united-kingdom/article/detail/T0216560EN_GB/the-new-bmw-3-series-saloon-and-touring?language=en_GB",
+    "source_name": "BMW · Inline engine architecture"
+  },
+  {
+    "slug": "w12",
+    "name": "W12 engines",
+    "short_name": "W12",
+    "code": "W12",
+    "group": "Cylinder layouts",
+    "selectors": {
+      "engine_layout": "w12"
+    },
+    "description": "Twelve cylinders in a compact W configuration. Despite sharing a cylinder count, it is a different architecture from a conventional V12.",
+    "note": "The third-generation Continental GT Speed selected here uses a twin-turbo W12. Other Continental generations have different powertrains.",
+    "source": "https://www.bentleymedia.com/en/newsitem/1200-the-most-dynamic-bentley-road-car-in-history-the-new-continental-gt-speed",
+    "source_name": "Bentley · Continental GT Speed launch"
+  },
+  {
+    "slug": "w16",
+    "name": "W16 engines",
+    "short_name": "W16",
+    "code": "W16",
+    "group": "Cylinder layouts",
+    "selectors": {
+      "engine_layout": "w16"
+    },
+    "description": "Sixteen cylinders in a W configuration. It is the cylinder architecture behind the original Bugatti Chiron’s combustion engine.",
+    "note": "The Chiron in this collection pairs its W16 with four turbochargers. W16 names the layout; quad-turbo describes the induction.",
+    "source": "https://newsroom.bugatti.com/en/press-releases/bugatti-chiron-celebrates-its-debut-in",
+    "source_name": "Bugatti · Chiron debut"
+  },
+  {
+    "slug": "naturally-aspirated",
+    "name": "Naturally aspirated engines",
+    "short_name": "Naturally aspirated",
+    "code": "NA",
+    "group": "Air & boost",
+    "selectors": {
+      "induction": "naturally-aspirated"
+    },
+    "description": "An engine that draws in air without a turbocharger or supercharger. Naturally aspirated engines can use many different cylinder layouts.",
+    "note": "Explore the V12, V10 and flat-six examples below. A hybrid powertrain can still contain a naturally aspirated combustion engine.",
+    "source": "https://www.ferrari.com/en-US/corporate/articles/the-ferrari-812-superfast-the-new-extreme-performance-v12-berlinetta",
+    "source_name": "Ferrari · 812 Superfast launch"
+  },
+  {
+    "slug": "turbocharged",
+    "name": "Turbocharged engines",
+    "short_name": "Turbocharged",
+    "code": "T",
+    "group": "Air & boost",
+    "selectors": {
+      "induction": "turbocharged"
+    },
+    "description": "Exhaust gases spin a turbine connected to a compressor. The compressor increases the pressure of intake air before it enters the engine.",
+    "note": "Single, twin and quad describe the number of turbochargers. The current collection includes twin-turbo and quad-turbo engines.",
+    "source": "https://media.astonmartin.com/aston-martin-vanquish-an-icon-returns-to-reign-supreme/?lang=eng",
+    "source_name": "Aston Martin · Twin-turbo V12 engineering"
+  },
+  {
+    "slug": "supercharged",
+    "name": "Supercharged engines",
+    "short_name": "Supercharged",
+    "code": "SC",
+    "group": "Air & boost",
+    "selectors": {
+      "induction": "supercharged"
+    },
+    "description": "A compressor boosts the intake air, traditionally driven mechanically by the engine. A turbocharger instead takes its driving energy from exhaust gases.",
+    "note": "Supercharging describes how air is supplied, not the cylinder layout. There are no supercharged models in this collection yet.",
+    "source": "https://www.eaton.com/us/en-us/products/engine-solutions/superchargers/TVS-technology-applications/tvs-powersports.html",
+    "source_name": "Eaton · Supercharger technology"
+  }
+]

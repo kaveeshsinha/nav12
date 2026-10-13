@@ -1,0 +1,18 @@
+{% extends 'collection/base.html' %}
+{% block gallery_content %}
+<header class="nv-engine-intro">
+  <div><p class="nv-kicker"><span class="nv-red-dot"></span> The engine guide</p><h1>The heart of<br>every drive.</h1><p>A different rhythm. A different response. Get to know the engineering behind the cars you love.</p></div>
+  <div class="nv-engine-primer"><p class="nv-kicker">Three parts of the story</p><div><span>01</span><p><strong>Cylinder layout</strong>V12, V8 or flat-six: how the cylinders are arranged.</p></div><div><span>02</span><p><strong>Air & boost</strong>Naturally aspirated, turbocharged or supercharged.</p></div><div><span>03</span><p><strong>Powertrain</strong>How combustion and electric power work in the car.</p></div></div>
+</header>
+<nav class="nv-engine-jumps" aria-label="Engine guide sections">{% for group in groups %}<a href="#engine-group-{{ loop.index }}">{{ group }} <span aria-hidden="true">↓</span></a>{% endfor %}</nav>
+{% for group in groups %}
+<section class="nv-engine-group" id="engine-group-{{ loop.index }}" aria-labelledby="engine-title-{{ loop.index }}">
+  <div class="nv-section-heading"><div><p class="nv-kicker">0{{ loop.index }} / The engineering</p><h2 id="engine-title-{{ loop.index }}">{{ group }}</h2></div><span class="nv-count">{% if loop.first %}Start with an icon{% elif loop.index == 2 %}One layout, many personalities{% else %}How an engine breathes{% endif %}</span></div>
+  <div class="nv-engine-grid{% if loop.first %} nv-engine-grid-featured{% endif %}">
+  {% for slug, engine in engine_types.items() if engine.group == group %}
+    <a class="nv-engine-card" href="{{ url_for('collection.engine', engine_slug=slug) }}"><div class="nv-engine-card-top"><span class="nv-engine-code" aria-hidden="true">{{ engine.code }}</span>{{ arrow() }}</div><h3>{{ engine.short_name }}</h3><p>{{ engine.description }}</p><span class="nv-engine-card-bottom">{% if cars_by_engine[slug] %}{{ cars_by_engine[slug]|length }} {{ 'car' if cars_by_engine[slug]|length == 1 else 'cars' }} in the collection{% else %}Explore the engine guide{% endif %}<span aria-hidden="true">→</span></span></a>
+  {% endfor %}
+  </div>
+</section>
+{% endfor %}
+{% endblock %}

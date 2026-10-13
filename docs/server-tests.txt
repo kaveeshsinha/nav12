@@ -1,0 +1,23 @@
+test_account_files_never_exposed (test_app.NaV12Tests.test_account_files_never_exposed) ... ok
+test_account_lifecycle_hash_duplicate_and_session (test_app.NaV12Tests.test_account_lifecycle_hash_duplicate_and_session) ... ok
+test_all_forms_reject_missing_wrong_and_stale_csrf (test_app.NaV12Tests.test_all_forms_reject_missing_wrong_and_stale_csrf) ... ok
+test_auth_validation_and_rate_limit_preserved (test_app.NaV12Tests.test_auth_validation_and_rate_limit_preserved) ... ok
+test_csp_only_expanded_for_gallery_pages (test_app.NaV12Tests.test_csp_only_expanded_for_gallery_pages) ... ok
+test_dashboard_svg_preserved_and_collection_link_works (test_app.NaV12Tests.test_dashboard_svg_preserved_and_collection_link_works) ... ok
+test_every_catalogue_route_renders (test_app.NaV12Tests.test_every_catalogue_route_renders) ... ok
+test_invalid_routes_return_404_with_recovery (test_app.NaV12Tests.test_invalid_routes_return_404_with_recovery) ... ok
+test_media_files_catalogue_and_sources_integrity (test_app.NaV12Tests.test_media_files_catalogue_and_sources_integrity) ... ok
+test_member_routes_protected (test_app.NaV12Tests.test_member_routes_protected) ... ok
+test_search_filters_counts_and_empty_state (test_app.NaV12Tests.test_search_filters_counts_and_empty_state) ... ok
+test_all_engine_routes_require_login (test_navigation.NavigationTests.test_all_engine_routes_require_login) ... ok
+test_engine_filter_composes_with_existing_filters (test_navigation.NavigationTests.test_engine_filter_composes_with_existing_filters) ... ok
+test_engine_filter_has_exact_membership_and_persists_selection (test_navigation.NavigationTests.test_engine_filter_has_exact_membership_and_persists_selection) ... ok
+test_engine_guides_render_correct_cars_and_empty_guides (test_navigation.NavigationTests.test_engine_guides_render_correct_cars_and_empty_guides) ... ok
+test_four_native_navigation_sections_shared_across_member_pages (test_navigation.NavigationTests.test_four_native_navigation_sections_shared_across_member_pages) ... ok
+test_taxonomy_and_vehicle_engine_fields_are_complete (test_navigation.NavigationTests.test_taxonomy_and_vehicle_engine_fields_are_complete) ... ok
+test_unknown_engine_returns_empty_filter_and_404_guide_safely (test_navigation.NavigationTests.test_unknown_engine_returns_empty_filter_and_404_guide_safely) ... ok
+
+----------------------------------------------------------------------
+Ran 18 tests in 0.937s
+
+OK

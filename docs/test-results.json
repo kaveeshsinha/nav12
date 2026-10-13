@@ -1,0 +1,54 @@
+{
+  "checks": [
+    "Browser signup, login, dashboard and preserved inline V12 SVG",
+    "Hover preview, pointer travel, single-panel visibility, direct model link and Back",
+    "Keyboard preview, logical Tab order, Escape return focus, no focus trap",
+    "Rapid hover switching and pointer dismissal",
+    "Directory keyboard focus survives automatic scrolling",
+    "Search, combined filters, URL reload state, accurate counts, empty state and reset",
+    "Gallery dialog, next/previous, arrow keys, Escape, focus restoration",
+    "No horizontal overflow: 360px collection, brand, model, long model title",
+    "No horizontal overflow: 390px collection, brand, model, long model title",
+    "No horizontal overflow: 768px collection, brand, model, long model title",
+    "No horizontal overflow: 1280px collection, brand, model, long model title",
+    "No horizontal overflow: 1920px collection, brand, model, long model title",
+    "200% CSS layout zoom (browser UI zoom not automated)",
+    "Touch: separate labelled preview toggle, close, viewport fit, brand first-tap navigation",
+    "Reduced motion removes animations/transitions and retains previews",
+    "JavaScript disabled: GET search, car navigation, specs, gallery image link, Back",
+    "Image failure presents readable model-specific fallback",
+    "Preview responds under 4x CPU throttle; measured host timing recorded",
+    "Browser logout clears collection access"
+  ],
+  "screenshots": [
+    "after-dashboard.png",
+    "collection-desktop.png",
+    "collection-desktop-viewport.png",
+    "brand-preview-desktop.png",
+    "brand-desktop.png",
+    "model-desktop.png",
+    "collection-360.png",
+    "collection-390.png",
+    "collection-mobile-viewport.png",
+    "brand-mobile.png",
+    "model-mobile.png",
+    "collection-768.png",
+    "collection-1920.png",
+    "collection-zoom200.png",
+    "brand-preview-mobile.png"
+  ],
+  "errors": [],
+  "failed_requests": [],
+  "engine_limits": [
+    "firefox: unavailable (BrowserType.launch: Executable doesn't exist at /home/agent/.cache/ms-playwright/firefox-1538/firefox/firefox)",
+    "webkit: unavailable (BrowserType.launch: Executable doesn't exist at /home/agent/.cache/ms-playwright/webkit-2336/pw_run.sh)"
+  ],
+  "browser": "151.0.7922.173",
+  "environment": "Linux headless Chromium on cloud host; no physical mobile device",
+  "navigation_timing": {
+    "duration": 225.90000000037253,
+    "domContentLoaded": 71.29999999981374,
+    "resourceBytes": 178314
+  },
+  "preview_4x_cpu_ms": 247.3
+}

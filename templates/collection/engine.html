@@ -1,0 +1,12 @@
+{% extends 'collection/base.html' %}
+{% block gallery_content %}
+<header class="nv-engine-detail">
+  <div><a class="nv-back-link" href="{{ url_for('collection.engines') }}">← All engine types</a><p class="nv-kicker">{{ engine.group }}</p><h1>{{ engine.name }}</h1><p class="nv-engine-description">{{ engine.description }}</p></div>
+  <aside class="nv-engine-fact"><span class="nv-engine-watermark" aria-hidden="true">{{ engine.code }}</span><p class="nv-kicker">A closer look</p><p>{{ engine.note }}</p>{% if engine.source %}<a class="nv-text-link" href="{{ engine.source }}" target="_blank" rel="noopener noreferrer">{{ engine.source_name }} {{ arrow() }}<span class="nv-sr-only"> (opens in a new tab)</span></a>{% endif %}</aside>
+</header>
+<section class="nv-engine-matches" aria-labelledby="engine-cars-title"><div class="nv-section-heading"><div><p class="nv-kicker">From engineering to the road</p><h2 id="engine-cars-title">{% if cars %}Feel it in these cars.{% else %}More to discover.{% endif %}</h2></div><span class="nv-count">{{ cars|length }} {{ 'car' if cars|length == 1 else 'cars' }} in the collection</span></div>
+{% if cars %}<div class="nv-grid">{% for car in cars %}{{ card(car, gallery_brands, gallery_assets) }}{% endfor %}</div><a class="nv-text-link" href="{{ url_for('collection.index', engine=engine.slug) }}#catalogue">Filter these cars by brand or character <span aria-hidden="true">→</span></a>
+{% else %}<div class="nv-empty"><p class="nv-kicker">The guide keeps going</p><h3>No matching cars in this collection yet.</h3><p>You can still explore the engineering above, or discover the engine types in our current selection.</p><a class="nv-button" href="{{ url_for('collection.engines') }}">Browse engine types <span aria-hidden="true">→</span></a></div>{% endif %}
+</section>
+<div class="nv-engine-next"><div><p class="nv-kicker">Keep exploring</p><h2>Follow a different rhythm.</h2></div><div>{% for slug in ['na-v12', 'v8', 'flat-six', 'turbocharged'] if slug != engine.slug %}<a href="{{ url_for('collection.engine', engine_slug=slug) }}">{{ engine_types[slug].short_name }} {{ arrow() }}</a>{% endfor %}</div></div>
+{% endblock %}

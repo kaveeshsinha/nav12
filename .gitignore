@@ -6,3 +6,4 @@ data/
 *.xlsx.lock
 .env
 *.secret
+work/

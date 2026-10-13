@@ -1,0 +1,28 @@
+{% extends 'collection/base.html' %}
+{% block gallery_content %}
+<header class="nv-page-heading"><div><p class="nv-kicker"><span class="nv-red-dot"></span> The NaV12 collection</p><h1>Driven by obsession.</h1></div><p>Extraordinary machines. <br>The stories and engineering behind them.</p></header>
+{% if not filtered %}
+<section class="nv-feature" aria-label="Featured car">
+  {{ photo(featured, gallery_assets, hero=true) }}
+  <div class="nv-feature-shade"></div>
+  <div class="nv-feature-top"><span class="nv-kicker">In focus / 01</span><span>{{ featured.year }} · {{ gallery_brands[featured.brand].name }}</span></div>
+  <div class="nv-feature-content"><p class="nv-kicker">{{ featured.engine }}</p><h2>{{ featured.name }}<span>{{ featured.strapline }}</span></h2><a class="nv-button" href="{{ url_for('collection.car', car_slug=featured.slug) }}">Discover the {{ featured.name }} <span aria-hidden="true"><svg class="nv-arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></span></a></div>
+  <div class="nv-feature-note"><strong>{{ '{:,}'.format(featured.power) }} <small>PS</small></strong><span>Combined hybrid output</span></div>
+</section>
+<section class="nv-discovery" aria-labelledby="brands-title"><div><p class="nv-kicker">The marques</p><h2 id="brands-title">Different roads. <br>Shared obsession.</h2><p>Find a familiar favourite.<br>Or meet your next one.</p></div><div class="nv-directory">{{ brand_rows('directory', gallery_brands, cars_by_brand, gallery_assets) }}</div></section>
+{% endif %}
+<section id="catalogue" class="nv-catalogue" aria-labelledby="catalogue-title">
+<div class="nv-section-heading"><div><p class="nv-kicker">Explore the collection</p><h2 id="catalogue-title">Find your kind of extraordinary.</h2></div><span class="nv-count">{{ cars|length }} {{ 'car' if cars|length == 1 else 'cars' }}</span></div>
+<form method="get" action="{{ url_for('collection.index') }}#catalogue" class="nv-filters" role="search">
+<div class="nv-search-field"><label for="search-cars">Search the collection</label><input id="search-cars" type="search" name="q" value="{{ filters.q }}" maxlength="120" placeholder="Search a car, engine or year…"></div>
+<div><label for="brand-filter">Brand</label><select id="brand-filter" name="brand"><option value="">All brands</option>{% if filters.brand and filters.brand not in gallery_brands %}<option selected value="{{ filters.brand }}">Unknown brand: {{ filters.brand }}</option>{% endif %}{% for slug, brand in gallery_brands.items() %}<option value="{{ slug }}" {% if filters.brand == slug %}selected{% endif %}>{{ brand.name }}</option>{% endfor %}</select></div>
+<div><label for="powertrain-filter">Powertrain</label><select id="powertrain-filter" name="powertrain"><option value="">All powertrains</option>{% if filters.powertrain and filters.powertrain not in powertrains %}<option selected>{{ filters.powertrain }}</option>{% endif %}{% for value in powertrains %}<option {% if filters.powertrain == value %}selected{% endif %}>{{ value }}</option>{% endfor %}</select></div>
+<div><label for="character-filter">Character</label><select id="character-filter" name="character"><option value="">All characters</option>{% if filters.character and filters.character not in characters %}<option selected>{{ filters.character }}</option>{% endif %}{% for value in characters %}<option {% if filters.character == value %}selected{% endif %}>{{ value }}</option>{% endfor %}</select></div>
+<div><label for="engine-filter">Engine type</label><select id="engine-filter" name="engine"><option value="">All engines</option>{% if filters.engine and filters.engine not in engine_types %}<option selected value="{{ filters.engine }}">Unknown engine: {{ filters.engine }}</option>{% endif %}{% for slug, engine in engine_types.items() %}<option value="{{ slug }}" {% if filters.engine == slug %}selected{% endif %}>{{ engine.short_name }}</option>{% endfor %}</select></div>
+<button class="nv-button nv-filter-submit" type="submit">Find cars <span aria-hidden="true">→</span></button>
+</form>
+<div class="nv-results-bar"><p role="status">{{ cars|length }} of {{ gallery_cars|length }} cars{% if filters.q %} matching “{{ filters.q }}”{% endif %}{% if filters.engine in engine_types %} · {{ engine_types[filters.engine].short_name }}{% endif %}</p><a href="{{ url_for('collection.index') }}#catalogue">Reset filters <span aria-hidden="true">↺</span></a></div>
+{% if cars %}<div class="nv-grid">{% for car in cars %}{{ card(car, gallery_brands, gallery_assets) }}{% endfor %}</div>
+{% else %}<div class="nv-empty"><p class="nv-kicker">A different route</p><h3>No cars match this selection.</h3><p>Try a model name like “812”, search for an engine, or widen your filters.</p><a class="nv-button" href="{{ url_for('collection.index') }}#catalogue">Explore all {{ gallery_cars|length }} cars →</a></div>{% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,95 @@
+{% macro arrow() -%}<svg class="nv-arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg>{%- endmacro %}
+
+{% macro photo(car, assets, hero=false, asset_id=none) -%}
+{% set key = asset_id or (car.images[0] if car.images else none) %}
+{% set asset = assets.get(key) if key else none %}
+<div class="nv-photo{% if not asset %} nv-photo-missing{% endif %}">
+  {% if asset %}
+  <picture>
+    <source type="image/webp" srcset="{{ url_for('static', filename=asset.file ~ '-480.webp') }} 480w, {{ url_for('static', filename=asset.file ~ '-960.webp') }} 960w, {{ url_for('static', filename=asset.file ~ '-1600.webp') }} 1600w" sizes="{% if hero %}(max-width: 768px) 100vw, 85vw{% else %}(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 33vw{% endif %}">
+    <img src="{{ url_for('static', filename=asset.file ~ '-1600.jpg') }}" alt="{{ asset.alt }}" width="{{ asset.width }}" height="{{ asset.height }}" loading="{{ 'eager' if hero else 'lazy' }}" {% if hero %}fetchpriority="high"{% endif %} decoding="async">
+  </picture>
+  <span class="nv-photo-error" hidden>Photograph unavailable · {{ car.name }}</span>
+  {% else %}
+  <div class="nv-missing-content"><span class="nv-missing-mark" aria-hidden="true">{{ car.name }}</span><span>Exact-variant photography pending</span></div>
+  {% endif %}
+</div>
+{%- endmacro %}
+
+{% macro card(car, brands, assets) -%}
+<article class="nv-card">
+  <a class="nv-card-link" href="{{ url_for('collection.car', car_slug=car.slug) }}">
+    {{ photo(car, assets) }}
+    <div class="nv-card-body"><p class="nv-kicker">{{ brands[car.brand].name }} <span>{{ car.year }}</span></p>
+    <h3>{{ car.name }} <span aria-hidden="true"><svg class="nv-arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></span></h3>
+    <p class="nv-card-variant">{{ car.variant }}</p>
+    <div class="nv-card-specs"><span><strong>{{ '{:,}'.format(car.power) }}</strong> PS{% if car.powertrain == 'Plug-in hybrid' %} combined{% endif %}</span>{% if car.acceleration != 'Not verified' %}<span><strong>{{ car.acceleration }}</strong> s · 0–100</span>{% endif %}<span>{{ car.character }}</span></div></div>
+  </a>
+</article>
+{%- endmacro %}
+
+{% macro brand_rows(id, brands, by_brand, assets) -%}
+<div class="nv-brand-list">
+{% for slug, brand in brands.items() %}
+  <div class="nv-brand-row" data-brand-row>
+    <a class="nv-brand-name" href="{{ url_for('collection.brand', brand_slug=slug) }}" data-brand-link>{{ brand.name }} <span aria-hidden="true"><svg class="nv-arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></span></a>
+    <button class="nv-preview-toggle" type="button" aria-label="Preview {{ brand.name }}" aria-expanded="false" aria-controls="{{ id }}-{{ slug }}" hidden> <span aria-hidden="true">＋</span></button>
+    <section class="nv-brand-preview" id="{{ id }}-{{ slug }}" aria-label="{{ brand.name }} preview" hidden>
+      <div class="nv-preview-top"><span class="nv-kicker">{{ brand.origin }}</span><button class="nv-preview-close" type="button" aria-label="Close {{ brand.name }} preview">×</button></div>
+      <h3>{{ brand.headline }}</h3><p>{{ brand.intro }}</p>
+      {% for model in by_brand[slug][:3] %}
+      <a class="nv-preview-model" href="{{ url_for('collection.car', car_slug=model.slug) }}">{{ photo(model, assets) }}<span><small>{{ model.year }} · {{ model.powertrain }}</small><strong>{{ model.name }}</strong></span><span aria-hidden="true"><svg class="nv-arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></span></a>
+      {% endfor %}
+      <a class="nv-text-link" href="{{ url_for('collection.brand', brand_slug=slug) }}">Explore {{ brand.name }} <span aria-hidden="true">→</span></a>
+    </section>
+  </div>
+{% endfor %}
+</div>
+{%- endmacro %}
+
+{% macro brand_menu(id, brands, by_brand, assets) -%}
+<details class="nv-brands nv-explore-menu" data-brand-menu data-explore-menu name="explore">
+  <summary>Car Brands <span aria-hidden="true">⌄</span></summary>
+  <div class="nv-brands-dropdown nv-explore-panel" data-explore-panel><p class="nv-kicker">Choose your obsession</p>{{ brand_rows(id, brands, by_brand, assets) }}</div>
+</details>
+{%- endmacro %}
+
+{% macro explore_nav(id) -%}
+<nav class="nv-explore-nav" aria-label="Explore NaV12">
+  <div class="nv-nav-track">
+    {{ brand_menu(id ~ '-brands', gallery_brands, cars_by_brand, gallery_assets) }}
+    <details class="nv-explore-menu" data-explore-menu name="explore">
+      <summary {% if request.endpoint in ['collection.engines', 'collection.engine'] %}class="nv-section-current"{% endif %}>Engine Types <span aria-hidden="true">⌄</span></summary>
+      <div class="nv-explore-panel nv-engine-menu" data-explore-panel>
+        <div class="nv-menu-heading"><div><p class="nv-kicker">Under the bonnet</p><h2>Find your kind of power.</h2></div><span class="nv-menu-count">{{ engine_types|length }} types</span></div>
+        <div class="nv-engine-menu-grid">
+        {% for slug in ['na-v12', 'twin-turbo-v12', 'v8', 'v6', 'flat-six', 'inline-six', 'v10', 'turbocharged'] %}
+        {% set engine = engine_types[slug] %}
+        <a class="nv-engine-menu-link" href="{{ url_for('collection.engine', engine_slug=slug) }}"><span class="nv-engine-code" aria-hidden="true">{{ engine.code }}</span><span><strong>{{ engine.short_name }}</strong><small>{% if cars_by_engine[slug] %}{{ cars_by_engine[slug]|length }} {{ 'car' if cars_by_engine[slug]|length == 1 else 'cars' }} to explore{% else %}Explore the engineering{% endif %}</small></span>{{ arrow() }}</a>
+        {% endfor %}
+        </div>
+        <a class="nv-menu-footer" href="{{ url_for('collection.engines') }}">Explore all engine types <span aria-hidden="true">→</span></a>
+      </div>
+    </details>
+    <details class="nv-explore-menu" data-explore-menu name="explore">
+      <summary>Driving Character <span aria-hidden="true">⌄</span></summary>
+      <div class="nv-explore-panel nv-topic-menu" data-explore-panel><p class="nv-kicker">Choose the feeling</p>
+      {% for name, description in nav_characters.items() %}
+        <a class="nv-topic-link" href="{{ url_for('collection.index', character=name) }}#catalogue"><span><strong>{{ name }}</strong><small>{{ description }}</small></span><span class="nv-topic-count">{{ gallery_cars.values()|selectattr('character', 'equalto', name)|list|length }}<span class="nv-sr-only"> cars</span></span></a>
+      {% endfor %}
+      </div>
+    </details>
+    <details class="nv-explore-menu" data-explore-menu name="explore">
+      <summary>Powertrains <span aria-hidden="true">⌄</span></summary>
+      <div class="nv-explore-panel nv-topic-menu" data-explore-panel><p class="nv-kicker">How power reaches the road</p>
+      {% for name, description in nav_powertrains.items() %}
+        <a class="nv-topic-link" href="{{ url_for('collection.index', powertrain=name) }}#catalogue"><span><strong>{{ name }}</strong><small>{{ description }}</small></span><span class="nv-topic-count">{{ gallery_cars.values()|selectattr('powertrain', 'equalto', name)|list|length }}<span class="nv-sr-only"> cars</span></span></a>
+      {% endfor %}
+      <p class="nv-menu-note">Engine layout and powertrain are different. A hybrid can still have a naturally aspirated V12.</p>
+      </div>
+    </details>
+    <a class="nv-all-cars" href="{{ url_for('collection.index') }}#catalogue">All cars <span>{{ gallery_cars|length }}</span>{{ arrow() }}</a>
+  </div>
+  <span class="nv-scroll-hint" aria-hidden="true">Swipe to explore →</span>
+</nav>
+{%- endmacro %}

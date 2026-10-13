@@ -1,29 +1,12 @@
 {% extends 'base.html' %}
+{% from 'collection/components.html' import explore_nav with context %}
+{% block body_class %}dashboard-page{% endblock %}
+{% block head_extra %}<link rel="stylesheet" href="{{ url_for('static', filename='collection/collection.css') }}">{% endblock %}
+{% block scripts %}<script defer src="{{ url_for('static', filename='collection/collection.js') }}"></script>{% endblock %}
 {% block content %}
 <div class="dashboard-layout">
 
-    <aside class="car-sidebar">
-        <div class="sidebar-title">
-            <h3>CAR BRANDS</h3>
-
-            <span class="brand-search-icon" aria-label="Search car brands">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <circle cx="11" cy="11" r="6"></circle>
-                    <path d="M16 16L21 21"></path>
-                </svg>
-            </span>
-        </div>
-        <a href="#">Ferrari</a>
-        <a href="#">Lamborghini</a>
-        <a href="#">Porsche</a>
-        <a href="#">Mercedes</a>
-        <a href="#">BMW</a>
-        <a href="#">Audi</a>
-        <a href="#">McLaren</a>
-        <a href="#">Aston Martin</a>
-        <a href="#">Bentley</a>
-        <a href="#">Bugatti</a>
-    </aside>
+    <div class="dashboard-brands">{{ explore_nav('dashboard') }}</div>
 
     <section class="dashboard">
   <p class="eyebrow"><span class="dot"></span> THE GARAGE / MEMBERS AREA</p>
@@ -34,7 +17,7 @@
     </div>
   </div>
   <article class="feature">
-    <div><p class="eyebrow">THE PURSUIT OF PERFORMANCE</p><h2>Twelve cylinders.<br>One obsession.</h2><p>From the unmistakable silhouette of a Porsche to the presence of Mercedes-AMG, explore a world of automotive ambition.</p><a class="primary collection-link" href="#collection">Explore the collection <span>↓</span></a></div>
+    <div><p class="eyebrow">THE PURSUIT OF PERFORMANCE</p><h2>Twelve cylinders.<br>One obsession.</h2><p>From the unmistakable silhouette of a Porsche to the presence of Mercedes-AMG, explore a world of automotive ambition.</p><a class="primary collection-link" href="{{ url_for('collection.index') }}">Explore the collection <span>↓</span></a></div>
     <div class="feature-graphic">
 
     <svg class="v12-pro" viewBox="0 0 640 420"
@@ -258,21 +241,21 @@
 
     </div>
   </article>
-  <section aria-label="Lamborghini Revuelto specifications">
-    <div class="section-title"><h2>The Naturally aspirated V12 / Ferrari 812 Superfast</h2></div>
+  <section aria-label="Ferrari 812 Superfast specifications">
+    <div class="section-title"><h2>The naturally aspirated V12 / Ferrari 812 Superfast</h2></div>
     <div class="spec-grid">
       <div class="spec"><strong>6.5 L</strong><span>6496 cm³ V12</span></div>
-      <div class="spec"><strong>789 hp</strong><span>at 8,500 rpm</span></div>
+      <div class="spec"><strong>800 PS</strong><span>at 8,500 rpm</span></div>
       <div class="spec"><strong>2.9 s</strong><span>0–100 km/h</span></div>
-      <div class="spec"><strong>&gt;350</strong><span>Top speed · km/h</span></div>
+      <div class="spec"><strong>&gt;340</strong><span>Top speed · km/h</span></div>
     </div>
-    <p class="spec-source">Manufacturer figures. Combined power includes the electric motors, not just the V12 engine. <a href="https://www.lamborghini.com/en-en/models/revuelto-models/revuelto" target="_blank" rel="noopener noreferrer">View official specifications ↗</a></p>
+    <p class="spec-source">2017 Ferrari 812 Superfast launch figures. Power is engine output in metric horsepower (PS / CV). <a href="https://www.ferrari.com/en-US/corporate/articles/the-ferrari-812-superfast-the-new-extreme-performance-v12-berlinetta" target="_blank" rel="noopener noreferrer">View official specifications ↗</a></p>
   </section>
   <div class="section-title"><h2>The shortlist</h2><span>03 / EDITORIAL PICKS</span></div>
   <div id="collection" class="car-grid">
-    <article class="car-card"><div class="card-top"><span>01 / PRECISION</span><span>↗</span></div><div class="card-mark">911</div><h3>Porsche</h3><p>Timeless sports-car design and a relentless fascination with the perfect corner.</p><span class="pill">THE SPORTS CAR ICON</span></article>
-    <article class="car-card"><div class="card-top"><span>02 / PRESENCE</span><span>↗</span></div><div class="card-mark">AMG</div><h3>Mercedes-AMG</h3><p>Muscular character, expressive styling, and a passion for performance.</p><span class="pill">PERFORMANCE WITH ATTITUDE</span></article>
-    <article class="car-card"><div class="card-top"><span>03 / EMOTION</span><span>↗</span></div><div class="card-mark">GT</div><h3>The grand tourer</h3><p>Long roads, sweeping curves, and the simple pleasure of taking the scenic route.</p><span class="pill">MADE FOR THE JOURNEY</span></article>
+    <article class="car-card"><div class="card-top"><span>01 / PRECISION</span><span>↗</span></div><div class="card-mark">911</div><h3><a href="{{ url_for('collection.brand', brand_slug='porsche') }}">Porsche ↗</a></h3><p>Timeless sports-car design and a relentless fascination with the perfect corner.</p><span class="pill">THE SPORTS CAR ICON</span></article>
+    <article class="car-card"><div class="card-top"><span>02 / PRESENCE</span><span>↗</span></div><div class="card-mark">AMG</div><h3><a href="{{ url_for('collection.brand', brand_slug='mercedes') }}">Mercedes-AMG ↗</a></h3><p>Muscular character, expressive styling, and a passion for performance.</p><span class="pill">PERFORMANCE WITH ATTITUDE</span></article>
+    <article class="car-card"><div class="card-top"><span>03 / EMOTION</span><span>↗</span></div><div class="card-mark">GT</div><h3><a href="{{ url_for('collection.index', character='Grand tourer') }}">The grand tourer ↗</a></h3><p>Long roads, sweeping curves, and the simple pleasure of taking the scenic route.</p><span class="pill">MADE FOR THE JOURNEY</span></article>
   </div>
   <p class="editorial-note">An enthusiast's demo collection. Brand names are used for illustrative content; NaV12 is independent.</p>
     </section>

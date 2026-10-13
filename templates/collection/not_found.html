@@ -1,0 +1,4 @@
+{% extends 'collection/base.html' %}
+{% block gallery_content %}
+<div class="nv-empty nv-catalogue"><p class="nv-kicker">404 / Off the route</p><h1>This page isn’t in the collection.</h1><p>Check the address, or head back to the cars.</p><a class="nv-button" href="{{ url_for('collection.index') }}">Explore the collection →</a></div>
+{% endblock %}

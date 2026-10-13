@@ -1,0 +1,13 @@
+{% extends 'collection/base.html' %}
+{% block gallery_content %}
+<nav class="nv-breadcrumbs" aria-label="Breadcrumb"><a href="{{ url_for('collection.index') }}">Collection</a><span aria-hidden="true">/</span><span aria-current="page">{{ brand.name }}</span></nav>
+<header class="nv-page-heading nv-brand-heading"><div><p class="nv-kicker">{{ brand.origin }}</p><h1>{{ brand.name }}</h1></div><p>{{ brand.headline }}</p></header>
+<section class="nv-feature nv-brand-hero" aria-label="Featured {{ brand.name }}">
+{{ photo(featured, gallery_assets, hero=true) }}<div class="nv-feature-shade"></div>
+<div class="nv-feature-top"><span class="nv-kicker">The NaV12 selection</span><span>{{ featured.year }} · {{ featured.character }}</span></div>
+<div class="nv-feature-content"><p class="nv-kicker">In focus</p><h2>{{ featured.name }}</h2><a class="nv-button" href="{{ url_for('collection.car', car_slug=featured.slug) }}">Explore the {{ featured.name }} <span aria-hidden="true"><svg class="nv-arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></span></a></div>
+</section>
+<section class="nv-editorial"><p class="nv-kicker">The marque</p><div><h2>{{ brand.headline }}</h2><p>{{ brand.intro }}</p></div></section>
+<section class="nv-catalogue"><div class="nv-section-heading"><h2>Inside the collection</h2><span class="nv-count">{{ cars|length }} {{ 'model' if cars|length == 1 else 'models' }}</span></div><div class="nv-grid">{% for car in cars %}{{ card(car, gallery_brands, gallery_assets) }}{% endfor %}</div></section>
+<a class="nv-text-link nv-back-link" href="{{ url_for('collection.index') }}">← Back to all marques</a>
+{% endblock %}

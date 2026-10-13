@@ -1,0 +1,40 @@
+{
+  "checks": [
+    "Synthetic signup/login and preserved dashboard with four sections in one row",
+    "Click switches a single open menu; outside click closes it",
+    "Native keyboard opening, links reachable by Tab, Escape returns focus to summary",
+    "Existing brand hover preview survives pointer travel and closes when switching sections",
+    "Engine links lead to real guide pages, exact NA V12 cars, and honest zero-car V6/turbo V12 guides",
+    "Driving Character and Powertrains menu links apply real filters with accurate results",
+    "Engine filter composes with character/brand, persists on reload, handles zero, and resets",
+    "360px: one nav row and no page overflow across six routes; all menus fit viewport",
+    "390px: one nav row and no page overflow across six routes; all menus fit viewport",
+    "768px: one nav row and no page overflow across six routes; all menus fit viewport",
+    "1280px: one nav row and no page overflow across six routes; all menus fit viewport",
+    "1920px: one nav row and no page overflow across six routes; all menus fit viewport",
+    "Touch emulation: horizontally scrollable nav, clamped menus, outside dismissal and real engine navigation",
+    "JavaScript disabled: native menus, engine guide links, GET filter and car navigation work"
+  ],
+  "screenshots": [
+    "navigation-dashboard-desktop.png",
+    "navigation-engine-menu-desktop.png",
+    "navigation-na-v12-guide.png",
+    "navigation-engine-guide-desktop.png",
+    "navigation-engine-filter-desktop.png",
+    "navigation-collection-360.png",
+    "navigation-collection-390.png",
+    "navigation-collection-768.png",
+    "navigation-collection-1280.png",
+    "navigation-collection-1920.png",
+    "navigation-mobile-powertrain-menu.png",
+    "navigation-mobile-engine-menu.png",
+    "navigation-mobile-flat-six-guide.png",
+    "navigation-collection-engine-menu.png",
+    "navigation-collection-brands-menu.png",
+    "navigation-mobile-default.png"
+  ],
+  "errors": [],
+  "failed_requests": [],
+  "browser": "151.0.7922.173",
+  "environment": "Linux headless Chromium; viewport/touch emulation, no physical device"
+}

@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% from 'collection/components.html' import photo, card, brand_menu, brand_rows, explore_nav, arrow with context %}
+{% block body_class %}collection-page{% endblock %}
+{% block head_extra %}<link rel="stylesheet" href="{{ url_for('static', filename='collection/collection.css') }}"><meta name="description" content="NaV12: an independent automotive collection. Explore exceptional cars, the engineering behind them, and manufacturer-sourced specifications.">{% endblock %}
+{% block content %}
+<a class="nv-skip" href="#gallery-content">Skip to collection content</a>
+<div class="nv-shell">
+  {{ explore_nav('nav') }}
+  <nav class="nv-path-line" aria-label="Breadcrumb"><a href="{{ url_for('dashboard') }}">Your garage</a><span aria-hidden="true">/</span><a href="{{ url_for('collection.index') }}" {% if request.endpoint == 'collection.index' %}aria-current="page"{% endif %}>Car Collection</a>{% if request.endpoint in ['collection.engines', 'collection.engine'] %}<span aria-hidden="true">/</span><a href="{{ url_for('collection.engines') }}" {% if request.endpoint == 'collection.engines' %}aria-current="page"{% endif %}>Engine types</a>{% endif %}</nav>
+  <div id="gallery-content">{% block gallery_content %}{% endblock %}</div>
+  <div class="nv-colophon"><p>Built for the love of driving.</p><div><span>Independent. Enthusiast curated.</span><a href="{{ url_for('collection.credits') }}">Photography & sources <svg class="nv-arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg></a></div></div>
+</div>
+{% endblock %}
+{% block scripts %}<script defer src="{{ url_for('static', filename='collection/collection.js') }}"></script>{% endblock %}
