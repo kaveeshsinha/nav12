@@ -7,7 +7,8 @@ import unittest
 from pathlib import Path
 
 _storage = tempfile.TemporaryDirectory(prefix='nav12-test-')
-os.environ['DATA_DIR'] = _storage.name  # Set BEFORE app import (startup opens Excel).
+os.environ['DATA_DIR'] = _storage.name
+os.environ['DATABASE_URL'] = os.environ.get('NAV12_TEST_DATABASE_URL', 'sqlite:///' + str(Path(_storage.name) / 'test.sqlite3'))
 os.environ['APP_ENV'] = 'development'
 from app import app, rate_buckets, account
 from collection import CARS, BRANDS, ASSETS
@@ -15,7 +16,7 @@ from collection import CARS, BRANDS, ASSETS
 
 class NaV12Tests(unittest.TestCase):
     def setUp(self):
-        app.config.update(TESTING=True, USER_FILE=Path(_storage.name) / 'users.xlsx')
+        app.config.update(TESTING=True)
         rate_buckets.clear()
         self.client = app.test_client()
 
@@ -134,7 +135,8 @@ class NaV12Tests(unittest.TestCase):
     def test_account_files_never_exposed(self):
         for path in ('/data/users.xlsx','/catalogue/users.xlsx','/static/../data/users.xlsx'):
             self.assertEqual(self.client.get(path).status_code,404)
-        self.assertTrue(str(app.config['USER_FILE']).startswith(_storage.name))
+        self.assertNotIn('USER_FILE', app.config)
+        self.assertFalse((Path(_storage.name) / 'users.xlsx').exists())
 
 
 if __name__=='__main__': unittest.main()

@@ -10,7 +10,8 @@ from pathlib import Path
 from urllib.parse import urlencode
 
 _storage = tempfile.TemporaryDirectory(prefix='nav12-navigation-test-')
-os.environ['DATA_DIR'] = _storage.name  # Startup opens Excel: configure before import.
+os.environ['DATA_DIR'] = _storage.name
+os.environ['DATABASE_URL'] = os.environ.get('NAV12_TEST_DATABASE_URL', 'sqlite:///' + str(Path(_storage.name) / 'test.sqlite3'))
 os.environ['APP_ENV'] = 'development'
 
 from app import app
@@ -59,7 +60,7 @@ EXPECTED = {
 
 class NavigationTests(unittest.TestCase):
     def setUp(self):
-        app.config.update(TESTING=True, USER_FILE=Path(_storage.name) / 'users.xlsx')
+        app.config.update(TESTING=True)
         self.client = app.test_client()
 
     def member(self):

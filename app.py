@@ -1,23 +1,16 @@
-"""NaV12: single-instance Flask application with locked Excel storage.
-
-Linux/macOS only (fcntl); deploy one worker on persistent storage.
-"""
+"""NaV12 Flask app with PostgreSQL account storage for Render + Neon."""
 import os
 import re
 import secrets
-import fcntl
 import threading
 import time
 from collections import deque
-from contextlib import contextmanager
-from zipfile import BadZipFile
 from datetime import timedelta
 from pathlib import Path
 from functools import wraps
 from flask import Flask, abort, flash, redirect, render_template, request, session, url_for
-from openpyxl import Workbook, load_workbook
-from openpyxl.styles import Font, PatternFill
-from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.security import check_password_hash
+from accounts import AccountStore, StorageUnavailable
 
 BASE_DIR = Path(__file__).resolve().parent
 app = Flask(__name__)
@@ -25,11 +18,10 @@ production = os.environ.get('APP_ENV', 'development') == 'production'
 secret = os.environ.get('SECRET_KEY')
 if production and (not secret or len(secret) < 32):
     raise RuntimeError('Set SECRET_KEY to a random value of at least 32 characters.')
-# Restrict newly created workbook/lock files to the service owner.
+# Restrict local development database files to the service owner.
 os.umask(0o077)
 app.config.update(
     SECRET_KEY=secret or secrets.token_hex(32),
-    USER_FILE=Path(os.environ.get('DATA_DIR', str(BASE_DIR / 'data'))) / 'users.xlsx',
     SESSION_COOKIE_SECURE=production,
     MAX_USERS=int(os.environ.get('MAX_USERS', '1000')),
     SESSION_COOKIE_HTTPONLY=True,
@@ -39,33 +31,8 @@ app.config.update(
 )
 
 
-storage_mutex = threading.Lock()
 rate_mutex = threading.Lock()
 rate_buckets = {}
-
-
-class StorageUnavailable(Exception):
-    pass
-
-
-@contextmanager
-def workbook_lock(path):
-    # Thread lock + OS lock: protect a complete read/check/append/save transaction.
-    with storage_mutex:
-        with open(str(path) + '.lock', 'a') as handle:
-            deadline = time.monotonic() + 5
-            while True:
-                try:
-                    fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
-                    break
-                except BlockingIOError:
-                    if time.monotonic() >= deadline:
-                        raise StorageUnavailable('Workbook is busy')
-                    time.sleep(0.05)
-            try:
-                yield
-            finally:
-                fcntl.flock(handle, fcntl.LOCK_UN)
 
 
 def rate_allowed(username):
@@ -87,64 +54,9 @@ def rate_allowed(username):
         return True
 
 
-def workbook_path():
-    path = Path(app.config['USER_FILE'])
-    path.parent.mkdir(parents=True, exist_ok=True)
-    return path
-
-
-def save_workbook(wb, path):
-    # Replace only after a complete write, so an interrupted save keeps the old file.
-    temporary = path.with_suffix('.tmp.xlsx')
-    try:
-        wb.save(temporary)
-        with temporary.open('rb') as handle:
-            os.fsync(handle.fileno())
-        os.replace(temporary, path)
-    finally:
-        temporary.unlink(missing_ok=True)
-
-
-def open_users(path):
-    if path.exists():
-        wb = load_workbook(path)
-        if 'Users' not in wb.sheetnames or [c.value for c in wb['Users'][1]] != ['Username', 'Password']:
-            wb.close()
-            raise StorageUnavailable('Unexpected workbook format; restore a valid backup')
-        return wb
-    wb = Workbook()
-    ws = wb.active
-    ws.title = 'Users'
-    ws.append(['Username', 'Password'])
-    ws.freeze_panes = 'A2'
-    ws.column_dimensions['A'].width = 28
-    ws.column_dimensions['B'].width = 90
-    for cell in ws[1]:
-        cell.font = Font(bold=True, color='FFFFFF')
-        cell.fill = PatternFill('solid', fgColor='172126')
-    save_workbook(wb, path)
-    return wb
-
-
 def account(username, password=None):
-    """Read one hash, or append an account; lock the entire read/write operation."""
-    path = workbook_path()
-    with workbook_lock(path):
-        wb = open_users(path)
-        try:
-            ws = wb['Users']
-            for name, saved_hash in ws.iter_rows(min_row=2, max_col=2, values_only=True):
-                if name and str(name).casefold() == username.casefold():
-                    return False if password is not None else saved_hash
-            if password is None:
-                return None
-            if ws.max_row - 1 >= app.config['MAX_USERS']:
-                raise StorageUnavailable('Registration capacity reached')
-            ws.append([username, generate_password_hash(password)])
-            save_workbook(wb, path)
-            return True
-        finally:
-            wb.close()
+    store = app.extensions['accounts']
+    return store.read_hash(username) if password is None else store.create_account(username, password)
 
 
 def csrf_token():
@@ -265,8 +177,6 @@ def health():
 
 
 @app.errorhandler(StorageUnavailable)
-@app.errorhandler(OSError)
-@app.errorhandler(BadZipFile)
 def storage_error(error):
     app.logger.error('Account storage unavailable: %s', type(error).__name__)
     return render_template('error.html', title='Temporarily unavailable',
@@ -284,11 +194,21 @@ def request_error(error):
     return response
 
 
-# Runs at import, including under Gunicorn and PythonAnywhere WSGI.
-# Never silently overwrite an existing damaged workbook.
-with workbook_lock(workbook_path()):
-    initial_workbook = open_users(workbook_path())
-    initial_workbook.close()
+# Production always requires an external PostgreSQL database.
+# SQLite is only a convenience for local development without cloud credentials.
+database_url = os.environ.get('DATABASE_URL', '').strip()
+if not database_url:
+    if production:
+        raise RuntimeError('Set DATABASE_URL to your Neon PostgreSQL connection URL.')
+    local_dir = Path(os.environ.get('DATA_DIR', str(BASE_DIR / 'data')))
+    local_dir.mkdir(parents=True, exist_ok=True)
+    database_url = 'sqlite:///' + str((local_dir / 'nav12.sqlite3').resolve())
+store = AccountStore(database_url, production=production, max_users=app.config['MAX_USERS'])
+try:
+    store.initialize()
+except StorageUnavailable:
+    raise RuntimeError('Cannot initialize the account database. Check DATABASE_URL and database availability.') from None
+app.extensions['accounts'] = store
 
 
 if __name__ == '__main__':
