@@ -2,7 +2,8 @@
 (() => {
   'use strict';
   const rows = [...document.querySelectorAll('[data-brand-row]')];
-  const menus = [...document.querySelectorAll('[data-explore-menu]')];
+  const menus = []; // Shared menu controller is below.
+  document.addEventListener('nv:close-preview', () => closePreview());
   const menuCloseTimers = new Map();
   let active = null, openTimer, closeTimer, restoringFocus = false, keyboardNavigation = false;
   document.addEventListener('keydown', event => { if (event.key === 'Tab') keyboardNavigation = true; }, true);
@@ -45,6 +46,7 @@
     panel.style.top = `${top}px`;
   }
   function openPreview(row) {
+    if (row.closest('[inert]')) return;
     clearTimers();
     if (active !== row) closePreview();
     active = row;
@@ -208,4 +210,142 @@
     if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) dialog.close();
   });
   dialog.addEventListener('close', () => returnFocus?.focus({preventScroll: true}));
+})();
+
+
+/* Shared navigation panel: switch contents without closing the surface. */
+(() => {
+  const finePointer = matchMedia('(hover: hover) and (pointer: fine)');
+
+  document.querySelectorAll('.nv-explore-nav').forEach((nav, navIndex) => {
+    const items = [...nav.querySelectorAll('[data-explore-menu]')];
+    if (!items.length || nav.querySelector('.nv-shared-menu')) return;
+
+    const shell = document.createElement('div');
+    shell.className = 'nv-shared-menu';
+    nav.append(shell);
+    let current = -1, closeTimer;
+    const resetPreview = () => document.dispatchEvent(new Event('nv:close-preview'));
+    const cancelClose = () => clearTimeout(closeTimer);
+
+    const entries = items.map((item, index) => {
+      const trigger = item.querySelector('summary');
+      const panel = item.querySelector('[data-explore-panel]');
+      const content = document.createElement('div');
+      content.className = 'nv-shared-content';
+      content.append(...panel.childNodes);
+      panel.append(content);
+      shell.append(panel);
+      item.removeAttribute('name');
+      item.open = false;
+      panel.id ||= `nv-panel-${navIndex}-${index}`;
+      trigger.id ||= `nv-trigger-${navIndex}-${index}`;
+      trigger.setAttribute('aria-controls', panel.id);
+      trigger.setAttribute('aria-expanded', 'false');
+      panel.setAttribute('role', 'region');
+      panel.setAttribute('aria-labelledby', trigger.id);
+      panel.setAttribute('aria-hidden', 'true');
+      panel.inert = true;
+      return { item, trigger, panel, content };
+    });
+
+    function fitPanel() {
+      if (current < 0) return;
+
+      const { panel, content } = entries[current];
+      const style = getComputedStyle(panel);
+      const wanted = Math.ceil(
+        content.scrollHeight
+        + parseFloat(style.paddingTop)
+        + parseFloat(style.paddingBottom)
+      );
+      const maxHeight = Math.floor(
+        document.documentElement.clientHeight * 0.65
+      );
+
+      shell.style.height = `${Math.min(wanted, maxHeight)}px`;
+    }
+
+    function show(index) {
+      cancelClose();
+      if (current === index) return;
+      const moveFocus = current >= 0 && entries[current].panel.contains(document.activeElement);
+      resetPreview();
+      current = index;
+      entries.forEach(({ item, trigger, panel }, i) => {
+        const selected = i === index;
+        item.open = selected;
+        trigger.setAttribute('aria-expanded', String(selected));
+        panel.setAttribute('aria-hidden', String(!selected));
+        panel.inert = !selected;
+        panel.classList.toggle('is-active', selected);
+      });
+      if (moveFocus) entries[index].trigger.focus({ preventScroll: true });
+      entries[index].panel.scrollTop = 0;
+      fitPanel();
+      shell.classList.add('is-open');
+    }
+
+    function close(restoreFocus = false) {
+      cancelClose();
+      if (current < 0) return;
+      const trigger = entries[current].trigger;
+      resetPreview();
+      current = -1;
+      entries.forEach(({ item, trigger, panel }) => {
+        item.open = false;
+        trigger.setAttribute('aria-expanded', 'false');
+        panel.setAttribute('aria-hidden', 'true');
+        panel.inert = true;
+        panel.classList.remove('is-active');
+      });
+      shell.classList.remove('is-open');
+      shell.style.height = '0px';
+      if (restoreFocus) trigger.focus({ preventScroll: true });
+    }
+
+    entries.forEach(({ trigger, panel }, index) => {
+      trigger.addEventListener('pointerenter', event => {
+        if (finePointer.matches && event.pointerType !== 'touch') show(index);
+      });
+      trigger.addEventListener('click', event => {
+        event.preventDefault();
+        const toggle = event.detail === 0 || event.pointerType === 'touch' || !finePointer.matches;
+        if (current === index && toggle) close();
+        else show(index);
+      });
+      trigger.addEventListener('keydown', event => {
+        if (event.key !== 'ArrowDown') return;
+        event.preventDefault();
+        show(index);
+        panel.querySelector('a, button')?.focus({ preventScroll: true });
+      });
+    });
+
+    nav.addEventListener('pointerenter', cancelClose);
+    nav.addEventListener('pointerleave', event => {
+      if (!finePointer.matches || event.pointerType === 'touch') return;
+      cancelClose();
+      closeTimer = setTimeout(() => {
+        if (!nav.matches(':hover') && !nav.contains(document.activeElement)) close();
+      }, 260);
+    });
+    nav.addEventListener('focusout', () => {
+      setTimeout(() => { if (!nav.contains(document.activeElement)) close(); }, 0);
+    });
+    document.addEventListener('pointerdown', event => {
+      if (!nav.contains(event.target)) close();
+    });
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && !event.defaultPrevented && current >= 0) {
+        event.preventDefault();
+        close(true);
+      }
+    });
+    addEventListener('resize', fitPanel);
+    if ('ResizeObserver' in window) {
+      const observer = new ResizeObserver(fitPanel);
+      entries.forEach(({ content }) => observer.observe(content));
+    }
+  });
 })();

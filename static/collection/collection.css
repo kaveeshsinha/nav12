@@ -201,3 +201,88 @@
 @media(prefers-reduced-motion:reduce){.nv-explore-nav *{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 
 @media(max-width:520px){.dashboard-page .member-tag{display:none}.dashboard-page .site-header{min-height:76px;padding-inline:5%}}
+
+
+/* One shared dropdown surface for all four navigation tabs. */
+.nv-explore-nav .nv-explore-menu > summary {
+  transition: background 180ms ease, color 180ms ease, border-color 180ms ease;
+}
+.nv-explore-nav .nv-explore-menu:not([open]) > summary {
+  background: transparent;
+  border-color: transparent;
+  color: var(--nv-muted);
+}
+.nv-shared-menu {
+  position: fixed;
+  z-index: 1100;
+  height: 0;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  background: #1c2022;
+  border: 1px solid #434849;
+  border-radius: 0 0 20px 20px;
+  box-shadow: 0 24px 60px #0008;
+  transition: height 300ms cubic-bezier(.22,.8,.25,1),
+              opacity 180ms ease, visibility 0s linear 300ms;
+}
+.nv-shared-menu.is-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition-delay: 0s;
+}
+.nv-shared-menu > .nv-explore-panel {
+  display: block;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  padding: 24px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: transparent;
+  border: 0;
+  border-radius: inherit;
+  box-shadow: none;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 160ms ease, visibility 0s linear 160ms;
+}
+.nv-shared-menu > .nv-explore-panel.is-active {
+  z-index: 1;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition-delay: 0s;
+}
+.nv-shared-menu [hidden] { display: none !important; }
+.nv-shared-menu button { font-family: inherit; }
+.nv-shared-content > .nv-kicker { margin-bottom: 14px; }
+.nv-shared-menu .nv-brand-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 32px;
+}
+@media (max-width: 520px) {
+  .nv-shared-menu > .nv-explore-panel { padding: 20px; }
+  .nv-shared-menu .nv-brand-list { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nv-shared-menu,
+  .nv-shared-menu > .nv-explore-panel { transition: none; }
+}
+
+/* Let the shared menu push the page content down. */
+.nv-shared-menu {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    max-width: none;
+    overflow: hidden;
+    border: 0;
+    box-shadow: inset 0 0 0 1px #434849;
+}
