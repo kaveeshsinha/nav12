@@ -3,12 +3,22 @@
   'use strict';
   const rows = [...document.querySelectorAll('[data-brand-row]')];
   const menus = [...document.querySelectorAll('[data-explore-menu]')];
+  const menuCloseTimers = new Map();
   let active = null, openTimer, closeTimer, restoringFocus = false, keyboardNavigation = false;
   document.addEventListener('keydown', event => { if (event.key === 'Tab') keyboardNavigation = true; }, true);
   document.addEventListener('pointerdown', () => { keyboardNavigation = false; }, true);
   const finePointer = matchMedia('(hover: hover) and (pointer: fine)');
   const panelFor = row => row.querySelector('.nv-brand-preview');
   const toggleFor = row => row.querySelector('.nv-preview-toggle');
+  function cancelMenuClose(menu) {
+    clearTimeout(menuCloseTimers.get(menu));
+    menuCloseTimers.delete(menu);
+  }
+  function closeMenu(menu) {
+    cancelMenuClose(menu);
+    menu.open = false;
+    if (active && menu.contains(active)) closePreview();
+  }
   function clearTimers() { clearTimeout(openTimer); clearTimeout(closeTimer); }
   function closePreview(restore = false) {
     clearTimers();
@@ -49,7 +59,9 @@
     row.addEventListener('pointerenter', event => {
       if (!finePointer.matches || event.pointerType === 'touch') return;
       clearTimers();
-      openTimer = setTimeout(() => openPreview(row), 100);
+      openTimer = setTimeout(() => {
+        if (row.closest('[data-explore-menu]')?.open !== false) openPreview(row);
+      }, 100);
     });
     row.addEventListener('pointerleave', () => {
       clearTimers();
@@ -71,36 +83,64 @@
   document.addEventListener('pointerdown', event => {
     if (active && !active.contains(event.target)) closePreview();
     menus.filter(menu => menu.open).forEach(menu => {
-      if (!menu.contains(event.target)) menu.open = false;
+      if (!menu.contains(event.target)) closeMenu(menu);
     });
   });
   document.addEventListener('keydown', event => {
     if (event.key !== 'Escape') return;
     if (active) { event.preventDefault(); closePreview(true); return; }
     const menu = menus.find(menu => menu.open);
-    if (menu) { event.preventDefault(); menu.open = false; menu.querySelector('summary').focus({preventScroll: true}); }
+    if (menu) { event.preventDefault(); closeMenu(menu); menu.querySelector('summary').focus({preventScroll: true}); }
   });
   function positionMenu(menu) {
     const panel = menu.querySelector('[data-explore-panel]');
     const anchor = menu.querySelector('summary').getBoundingClientRect();
-    const margin = 16;
-    const top = Math.max(margin, Math.min(anchor.bottom + 10, innerHeight - 220));
-    const left = Math.max(margin, Math.min(anchor.left, innerWidth - panel.offsetWidth - margin));
+    const margin = 16, gap = 8;
+    const viewportWidth = document.documentElement.clientWidth;
+    const viewportHeight = document.documentElement.clientHeight;
+    const below = Math.max(0, viewportHeight - anchor.bottom - gap - margin);
+    const above = Math.max(0, anchor.top - gap - margin);
+    const desiredHeight = panel.scrollHeight + 2;
+    // Use the side with room, keeping the trigger visible even in short windows.
+    const openBelow = below >= Math.min(desiredHeight, 220) || below >= above;
+    const available = Math.max(0, Math.min(openBelow ? below : above, viewportHeight - 2 * margin));
+    panel.style.setProperty('--nv-menu-height', `${available}px`);
+    const top = openBelow ? anchor.bottom + gap : anchor.top - gap - panel.offsetHeight;
+    const left = Math.max(margin, Math.min(anchor.left, viewportWidth - panel.offsetWidth - margin));
     panel.style.setProperty('--nv-menu-left', `${left}px`);
-    panel.style.setProperty('--nv-menu-top', `${top}px`);
-    panel.style.setProperty('--nv-menu-height', `${Math.max(0, innerHeight - top - margin)}px`);
+    panel.style.setProperty('--nv-menu-top', `${Math.max(margin, top)}px`);
   }
   menus.forEach(menu => {
+    menu.addEventListener('pointerenter', event => {
+      if (!finePointer.matches || event.pointerType === 'touch') return;
+      cancelMenuClose(menu);
+      if (menu.open) return;
+      menus.forEach(other => { if (other !== menu) closeMenu(other); });
+      menu.open = true;
+      positionMenu(menu);
+    });
+    menu.addEventListener('pointerleave', event => {
+      if (!finePointer.matches || event.pointerType === 'touch') return;
+      cancelMenuClose(menu);
+      // Allow crossing the small gap to a panel (including nested brand previews).
+      menuCloseTimers.set(menu, setTimeout(() => {
+        menuCloseTimers.delete(menu);
+        if (!menu.matches(':hover') && !menu.contains(document.activeElement)) closeMenu(menu);
+      }, 240));
+    });
     menu.addEventListener('toggle', () => {
       if (menu.open) {
-        menus.forEach(other => { if (other !== menu) other.open = false; });
+        menus.forEach(other => { if (other !== menu) closeMenu(other); });
         closePreview();
         positionMenu(menu);
       }
-      if (!menu.open && active && menu.contains(active)) closePreview();
+      if (!menu.open) {
+        cancelMenuClose(menu);
+        if (active && menu.contains(active)) closePreview();
+      }
     });
     menu.addEventListener('focusout', () => {
-      setTimeout(() => { if (menu.open && !menu.contains(document.activeElement)) menu.open = false; }, 0);
+      setTimeout(() => { if (menu.open && !menu.contains(document.activeElement)) closeMenu(menu); }, 0);
     });
   });
   addEventListener('resize', () => {
@@ -111,7 +151,7 @@
     menus.filter(menu => menu.open).forEach(menu => {
       if (menu.querySelector('[data-explore-panel]').contains(event.target)) return;
       const anchor = menu.querySelector('summary').getBoundingClientRect();
-      if (anchor.bottom < 0 || anchor.top > innerHeight || anchor.right < 0 || anchor.left > innerWidth) menu.open = false;
+      if (anchor.bottom < 0 || anchor.top > innerHeight || anchor.right < 0 || anchor.left > innerWidth) closeMenu(menu);
       else positionMenu(menu);
     });
     // Scrolling the preview itself must not dismiss it.
