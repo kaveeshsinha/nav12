@@ -1,0 +1,10 @@
+{% set is_saved = car.slug in saved_car_slugs %}
+<form class="nv-favourite-form" method="post" action="{{ url_for('garage.remove' if is_saved else 'garage.add', car_slug=car.slug) }}">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <input type="hidden" name="next" value="{{ request.full_path.rstrip('?') }}">
+  <button class="nv-favourite-button{% if is_saved %} is-saved{% endif %}" type="submit"
+          aria-label="{{ 'Remove ' ~ car.name ~ ' from favourites' if is_saved else 'Save ' ~ car.name ~ ' to favourites' }}">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg>
+    <span>{{ 'Saved to favourites' if is_saved else 'Save to favourites' }}</span>
+  </button>
+</form>

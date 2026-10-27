@@ -134,7 +134,11 @@
 .nv-nav-track{display:grid;grid-template-columns:repeat(4,minmax(0,1fr)) auto;align-items:stretch;gap:8px;width:100%;min-width:0;padding:14px 0;overflow:visible}
 .nv-explore-menu{min-width:0;position:static;font-size:13px;z-index:auto}
 .nv-explore-menu>summary{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;height:100%;min-width:0;min-height:56px;padding:12px 18px;border:1px solid transparent;border-radius:12px;background:transparent;color:var(--nv-muted);font:500 13px/1.5 var(--nv-font);white-space:normal;cursor:pointer;list-style:none;user-select:none}
-.nv-explore-menu:first-child>summary{border-color:#3a3e3f;background:#202425;color:var(--nv-text)}
+.nv-explore-menu:first-child > summary {
+    border-color: transparent;
+    background: transparent;
+    color: var(--nv-muted);
+}
 .nv-explore-menu>summary::-webkit-details-marker{display:none}
 .nv-explore-menu>summary::marker{content:''}
 .nv-explore-menu>summary>span{flex:none;font-size:16px;line-height:1;transition:transform var(--nv-fast);color:#c0c4c1}
@@ -201,79 +205,635 @@
 @media(prefers-reduced-motion:reduce){.nv-explore-nav *{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 
 @media(max-width:520px){.dashboard-page .member-tag{display:none}.dashboard-page .site-header{min-height:76px;padding-inline:5%}}
-
-
-/* One shared dropdown surface for all four navigation tabs. */
+/* Shared dropdown background and smooth content switching */
 .nv-explore-nav .nv-explore-menu > summary {
-  transition: background 180ms ease, color 180ms ease, border-color 180ms ease;
+    transition: background 180ms ease,
+                color 180ms ease,
+                border-color 180ms ease;
 }
+
 .nv-explore-nav .nv-explore-menu:not([open]) > summary {
-  background: transparent;
-  border-color: transparent;
-  color: var(--nv-muted);
+    background: transparent;
+    border-color: transparent;
+    color: var(--nv-muted);
 }
+
 .nv-shared-menu {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-  z-index: 1100;
-  height: 0;
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  background: #1c2022;
-  border: 0;
-  border-radius: 0 0 20px 20px;
-  box-shadow: inset 0 0 0 1px #434849;
-  transition: height 300ms cubic-bezier(.22,.8,.25,1),
-              opacity 180ms ease, visibility 0s linear 300ms;
+    position: fixed;
+    z-index: 1100;
+    height: 0;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    background: #1c2022;
+    border: 1px solid #434849;
+    border-radius: 0 0 20px 20px;
+    box-shadow: 0 24px 60px #0008;
+    transition:
+        height 300ms cubic-bezier(.22, .8, .25, 1),
+        opacity 180ms ease,
+        visibility 0s linear 300ms;
 }
+
 .nv-shared-menu.is-open {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-  transition-delay: 0s;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transition-delay: 0s;
 }
+
 .nv-shared-menu > .nv-explore-panel {
-  display: block;
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  max-width: none;
-  max-height: none;
-  padding: 24px;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  background: transparent;
-  border: 0;
-  border-radius: inherit;
-  box-shadow: none;
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transition: opacity 160ms ease, visibility 0s linear 160ms;
+    display: block;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    padding: 24px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background: transparent;
+    border: 0;
+    border-radius: inherit;
+    box-shadow: none;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+        opacity 160ms ease,
+        visibility 0s linear 160ms;
 }
+
 .nv-shared-menu > .nv-explore-panel.is-active {
-  z-index: 1;
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-  transition-delay: 0s;
+    z-index: 1;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transition-delay: 0s;
 }
-.nv-shared-menu [hidden] { display: none !important; }
-.nv-shared-menu button { font-family: inherit; }
-.nv-shared-content > .nv-kicker { margin-bottom: 14px; }
+
+.nv-shared-menu [hidden] {
+    display: none !important;
+}
+
+.nv-shared-menu button {
+    font-family: inherit;
+}
+
+.nv-shared-content > .nv-kicker {
+    margin-bottom: 14px;
+}
+
 .nv-shared-menu .nv-brand-list {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  column-gap: 32px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 32px;
 }
+
 @media (max-width: 520px) {
-  .nv-shared-menu > .nv-explore-panel { padding: 20px; }
-  .nv-shared-menu .nv-brand-list { grid-template-columns: 1fr; }
+    .nv-shared-menu > .nv-explore-panel {
+        padding: 20px;
+    }
+
+    .nv-shared-menu .nv-brand-list {
+        grid-template-columns: 1fr;
+    }
 }
+
 @media (prefers-reduced-motion: reduce) {
-  .nv-shared-menu,
-  .nv-shared-menu > .nv-explore-panel { transition: none; }
+    .nv-shared-menu,
+    .nv-shared-menu > .nv-explore-panel {
+        transition: none;
+    }
+}
+/* Make the dropdown take up space in the page */
+.nv-shared-menu {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    max-width: none;
+    overflow: hidden;
+    border: 0;
+    box-shadow: inset 0 0 0 1px #434849;
+}
+/* Engine menu: red glow on hover */
+.nv-engine-menu .nv-engine-menu-link,
+.nv-engine-menu .nv-engine-menu-link strong,
+.nv-engine-menu .nv-engine-code {
+    transition: color 180ms ease, text-shadow 180ms ease;
+}
+
+/* Remove the rectangular hover background */
+.nv-engine-menu .nv-engine-menu-link:hover,
+.nv-engine-menu .nv-engine-menu-link:focus-visible {
+    background: transparent;
+    box-shadow: none;
+    color: var(--nv-red, #ff454d);
+}
+
+/* Make the engine name and code glow red */
+.nv-engine-menu .nv-engine-menu-link:hover strong,
+.nv-engine-menu .nv-engine-menu-link:hover .nv-engine-code,
+.nv-engine-menu .nv-engine-menu-link:focus-visible strong,
+.nv-engine-menu .nv-engine-menu-link:focus-visible .nv-engine-code {
+    color: var(--nv-red, #ff454d);
+    text-shadow:
+        0 0 8px rgba(255, 69, 77, 0.55),
+        0 0 18px rgba(255, 69, 77, 0.25);
+}
+/* Smooth glow for the other menu options */
+.nv-explore-panel .nv-brand-name,
+.nv-explore-panel .nv-brand-name > span,
+.nv-explore-panel .nv-topic-link strong,
+.nv-explore-panel .nv-topic-count {
+    transition: color 180ms ease, text-shadow 180ms ease;
+}
+
+/* Keep hover backgrounds clear */
+.nv-explore-panel .nv-brand-name:is(:hover, :focus-visible),
+.nv-explore-panel .nv-topic-link:is(:hover, :focus-visible) {
+    background: transparent;
+    box-shadow: none;
+}
+
+/* Match the engine menu's red glow */
+.nv-explore-panel .nv-brand-name:is(:hover, :focus-visible),
+.nv-explore-panel .nv-brand-name:is(:hover, :focus-visible) > span,
+.nv-explore-panel .nv-topic-link:is(:hover, :focus-visible) strong,
+.nv-explore-panel .nv-topic-link:is(:hover, :focus-visible) .nv-topic-count {
+    color: var(--nv-red, #ff454d);
+    text-shadow:
+        0 0 8px rgba(255, 69, 77, 0.55),
+        0 0 18px rgba(255, 69, 77, 0.25);
+}
+
+/* Search above the car brand names */
+.nv-brand-search {
+    margin-bottom: 16px;
+}
+
+.nv-brand-search-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.nv-brand-search-heading .nv-kicker {
+    margin: 0;
+}
+
+.nv-brand-search-icon {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    padding: 10px;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--nv-muted, #a1abb1);
+    cursor: pointer;
+    transition: color 180ms ease;
+}
+
+.nv-brand-search-icon svg {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+}
+
+.nv-brand-search-icon:hover,
+.nv-brand-search-icon:focus-visible,
+.nv-brand-search-icon[aria-expanded="true"] {
+    color: var(--nv-red, #ff454d);
+}
+
+.nv-brand-search-icon:hover svg,
+.nv-brand-search-icon:focus-visible svg,
+.nv-brand-search-icon[aria-expanded="true"] svg {
+    filter: drop-shadow(0 0 6px rgba(255, 69, 77, .55));
+}
+
+.nv-brand-search-field {
+    margin-top: 12px;
+}
+
+.nv-brand-search-field input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #434849;
+    border-radius: 12px;
+    background: #101518;
+    color: var(--nv-text, #f3f5f3);
+    font: inherit;
+    font-size: 14px;
+}
+
+.nv-brand-search-field input:focus {
+    border-color: var(--nv-red, #ff454d);
+}
+
+.nv-brand-search-empty {
+    padding: 16px 0;
+    font-size: 13px;
+    color: var(--nv-muted, #a1abb1);
+}
+
+.nv-brands-dropdown [hidden] {
+    display: none !important;
+}
+/* Search icon and integrated search panel */
+.nv-explore-nav .nv-search-menu > summary.nv-nav-search {
+    width: 56px;
+    min-height: 56px;
+    padding: 14px;
+    justify-content: center;
+    background: transparent;
+    border-color: transparent;
+    color: var(--nv-muted, #a1abb1);
+    transition: color 180ms ease, transform 180ms ease;
+}
+
+.nv-nav-search svg {
+    width: 23px;
+    height: 23px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: filter 180ms ease;
+}
+
+/* Red glow when hovered, focused or open */
+.nv-explore-nav .nv-search-menu > summary.nv-nav-search:is(:hover, :focus-visible),
+.nv-explore-nav .nv-search-menu[open] > summary.nv-nav-search {
+    background: transparent;
+    border-color: transparent;
+    color: var(--nv-red, #ff454d);
+}
+
+/* Small pop-up movement */
+.nv-explore-nav .nv-search-menu > summary.nv-nav-search:is(:hover, :focus-visible) {
+    transform: translateY(-2px) scale(1.06);
+}
+
+.nv-nav-search:is(:hover, :focus-visible) svg,
+.nv-search-menu[open] .nv-nav-search svg {
+    filter: drop-shadow(0 0 6px rgba(255, 69, 77, .55));
+}
+
+/* Search bar inside the shared panel */
+.nv-nav-search-form label {
+    display: block;
+    margin-bottom: 12px;
+    color: var(--nv-text, #f3f5f3);
+    font-size: 13px;
+}
+
+.nv-nav-search-row {
+    display: flex;
+    gap: 12px;
+}
+
+.nv-nav-search-row input {
+    flex: 1;
+    min-width: 0;
+    padding: 13px 16px;
+    border: 1px solid #434849;
+    border-radius: 12px;
+    background: #101518;
+    color: var(--nv-text, #f3f5f3);
+    font: inherit;
+    font-size: 16px;
+}
+
+.nv-nav-search-row input:focus {
+    border-color: var(--nv-red, #ff454d);
+}
+
+.nv-nav-search-row button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    min-height: 48px;
+    padding: 12px 20px;
+    border: 0;
+    border-radius: 12px;
+    background: var(--nv-red, #ff454d);
+    color: white;
+    font: inherit;
+    cursor: pointer;
+}
+
+.nv-nav-search-row button:hover {
+    background: #ff6970;
+}
+
+@media (max-width: 850px) {
+    .nv-search-menu {
+        grid-column: 1 / -1;
+        justify-self: end;
+    }
+}
+
+@media (max-width: 520px) {
+    .nv-nav-search-row {
+        flex-direction: column;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .nv-explore-nav .nv-search-menu > summary.nv-nav-search:is(:hover, :focus-visible) {
+        transform: none;
+    }
+}
+
+.nv-nav-search svg {
+    width: 23px;
+    height: 23px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.nv-explore-nav .nv-nav-search:hover,
+.nv-explore-nav .nv-nav-search:focus-visible {
+    background: transparent;
+    color: var(--nv-red, #ff454d);
+}
+
+.nv-nav-search:hover svg,
+.nv-nav-search:focus-visible svg {
+    filter: drop-shadow(0 0 6px rgba(255, 69, 77, .55));
+}
+/* Connected navigation surface */
+.nv-explore-nav {
+    --nv-menu-ease: cubic-bezier(.4, 0, .6, 1);
+    border-bottom-color: transparent;
+    border-radius: 18px;
+    background-color: transparent;
+    transition: background-color 160ms ease 360ms;
+}
+
+.nv-explore-nav.nv-nav-open {
+    background-color: #1c2022;
+    transition-delay: 0ms;
+}
+
+.nv-explore-nav .nv-nav-track {
+    margin: 0;
+    padding: 14px 16px;
+}
+
+/* Tabs blend into the same surface */
+.nv-explore-nav .nv-explore-menu > summary,
+.nv-explore-nav .nv-explore-menu > summary:hover,
+.nv-explore-nav .nv-explore-menu[open] > summary {
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
+}
+
+/* Shared panel: fade contents first, then collapse */
+.nv-explore-nav .nv-shared-menu {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    border: 0;
+    border-radius: 0 0 18px 18px;
+    background: transparent;
+    box-shadow: none;
+
+    opacity: 1;
+    visibility: hidden;
+    pointer-events: none;
+
+    transition:
+        height 240ms var(--nv-menu-ease) 120ms,
+        visibility 0ms linear 360ms;
+}
+
+/* Opening and switching keep the panel connected */
+.nv-explore-nav .nv-shared-menu.is-open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+
+    transition:
+        height 240ms var(--nv-menu-ease),
+        visibility 0ms linear;
+}
+
+/* Contents move gently as they disappear */
+.nv-explore-nav .nv-shared-menu > .nv-explore-panel {
+    padding: 26px 32px 34px;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(-6px);
+
+    transition:
+        opacity 120ms ease,
+        transform 120ms ease,
+        visibility 0ms linear 120ms;
+}
+
+/* Contents appear slightly after expansion starts */
+.nv-explore-nav .nv-shared-menu > .nv-explore-panel.is-active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0);
+
+    transition:
+        opacity 240ms var(--nv-menu-ease) 100ms,
+        transform 240ms var(--nv-menu-ease) 100ms,
+        visibility 0ms linear;
+}
+
+/* Restrained lift and red glow */
+.nv-explore-nav .nv-search-menu > summary.nv-nav-search:is(:hover, :focus-visible) {
+    transform: translateY(-1px) scale(1.03);
+    color: var(--nv-red, #ff454d);
+    background: transparent;
+}
+
+.nv-nav-search:is(:hover, :focus-visible) svg,
+.nv-search-menu[open] .nv-nav-search svg {
+    filter: drop-shadow(0 0 5px rgba(255, 69, 77, .45));
+}
+
+/* Larger, borderless search field */
+.nv-nav-search-form {
+    margin: 0;
+}
+
+.nv-nav-search-row {
+    align-items: center;
+}
+
+.nv-nav-search-row input {
+    padding: 12px 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+
+    color: var(--nv-text, #f3f5f3);
+    caret-color: var(--nv-red, #ff454d);
+    font-size: clamp(22px, 3vw, 30px);
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.nv-nav-search-row input::placeholder {
+    color: #a1abb1;
+    opacity: 1;
+}
+
+/* Search action blends into the panel */
+.nv-nav-search-row button,
+.nv-nav-search-row button:hover {
+    background: transparent;
+    color: var(--nv-red, #ff454d);
+}
+
+.nv-nav-search-row button:hover {
+    text-shadow: 0 0 8px rgba(255, 69, 77, .45);
+}
+
+@media (max-width: 520px) {
+    .nv-explore-nav .nv-nav-track {
+        padding: 10px;
+    }
+
+    .nv-explore-nav .nv-shared-menu > .nv-explore-panel {
+        padding: 22px 20px 28px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .nv-explore-nav,
+    .nv-explore-nav .nv-shared-menu,
+    .nv-explore-nav .nv-shared-menu > .nv-explore-panel {
+        transition: none !important;
+    }
+
+    .nv-explore-nav .nv-shared-menu > .nv-explore-panel,
+    .nv-explore-nav .nv-search-menu > summary.nv-nav-search:is(:hover, :focus-visible) {
+        transform: none;
+    }
+}
+/* Compact search panel */
+.nv-explore-nav .nv-shared-menu > .nv-search-panel {
+    padding: 16px 24px 20px;
+}
+
+.nv-search-panel .nv-nav-search-form {
+    width: 100%;
+   max-width: none;
+    margin: 0 auto;
+}
+
+.nv-search-panel .nv-nav-search-form label {
+    margin: 0 0 10px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--nv-muted, #a1abb1);
+}
+
+/* Squircle-shaped search field */
+.nv-search-panel .nv-nav-search-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+
+    min-height: 50px;
+    padding: 6px 8px 6px 16px;
+
+    background: #101518;
+    border: 1px solid #343c42;
+    border-radius: 20px;
+    corner-shape: squircle;
+
+    transition:
+        border-color 180ms ease,
+        box-shadow 180ms ease;
+}
+
+/* Subtle red highlight while typing */
+.nv-search-panel .nv-nav-search-row:focus-within {
+    border-color: rgba(255, 69, 77, .55);
+    box-shadow: 0 0 0 3px rgba(255, 69, 77, .07);
+}
+
+/* Smaller input text */
+.nv-search-panel .nv-nav-search-row input {
+    flex: 1;
+    min-width: 0;
+    height: 36px;
+    padding: 6px 0;
+
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+/* The surrounding field provides the focus highlight */
+.nv-search-panel .nv-nav-search-row input:focus-visible {
+    outline: none;
+}
+
+.nv-search-panel .nv-nav-search-row input::placeholder {
+    color: #879299;
+}
+
+/* Compact search button */
+.nv-search-panel .nv-nav-search-row button {
+    flex-shrink: 0;
+    min-height: 36px;
+    height: 36px;
+    padding: 0 12px;
+    gap: 8px;
+
+    border-radius: 12px;
+    corner-shape: squircle;
+    background: rgba(255, 69, 77, .08);
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.nv-search-panel .nv-nav-search-row button:hover {
+    background: rgba(255, 69, 77, .16);
+}
+
+@media (max-width: 520px) {
+    .nv-explore-nav .nv-shared-menu > .nv-search-panel {
+        padding: 14px 16px 18px;
+    }
+
+    .nv-search-panel .nv-nav-search-row input {
+        font-size: 16px;
+    }
 }

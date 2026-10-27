@@ -4,11 +4,11 @@ Flask automotive website with car collections, brand previews, engine guides, pe
 
 ## My Garage and favourites
 
-Signed-in members can save or remove cars from catalogue cards and individual car pages, then open **My Garage** from the header. Choose a position and **Save rank** to reorder favourites; position #1 is the dream car. Select 2–4 saved cars to compare their specifications.
+Signed-in members can save or remove cars from catalogue cards and individual car pages, then open **My Garage** from the header. Choose a dream rank and select **Update** to reorder favourites; position #1 is the dream car. Select 2–4 saved cars to compare their specifications.
 
 Favourites and ranks are stored in `garage_favourites` in the same database as accounts: Neon PostgreSQL in production, SQLite for local development. Startup creates this additional table automatically using the existing `DATABASE_URL`; no installer or Excel workbook is needed. Existing accounts and password hashes remain intact. Favourites saved by the old local Excel installer are not imported automatically.
 
-The four exploration menus open on hover with one shared panel that moves page content down. Keyboard and touch controls are supported. Login and signup include Show/Hide password controls, and successful login opens the dashboard without a success banner.
+The four exploration menus open on hover with one shared panel that moves page content down. The search icon opens its panel on click or keyboard activation. Keyboard and touch controls are supported. Login uses a headlight password toggle; signup has a Show/Hide control. Successful login opens the dashboard without a success banner.
 
 ## Local development
 

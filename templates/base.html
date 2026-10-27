@@ -15,8 +15,9 @@
     <nav aria-label="Main navigation">
       {% if session.get('username') %}
 
-      <a class="nv-garage-nav" href="{{ url_for('garage.index') }}" {% if (request.endpoint or '').startswith('garage.') %}aria-current="page"{% endif %}>My Garage</a>
       <span class="member-tag">● DRIVER CONNECTED</span>
+
+      <a class="nv-garage-link" href="{{ url_for('garage.index') }}" {% if (request.endpoint or '').startswith('garage.') %}aria-current="page"{% endif %}>My Garage <span class="nv-garage-count">{{ garage_count }}</span></a>
 
       <form method="post" action="{{ url_for('logout') }}">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">

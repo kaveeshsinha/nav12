@@ -1,40 +1,78 @@
 {% extends 'collection/base.html' %}
 {% block gallery_content %}
-<header class="nv-page-heading nv-garage-heading">
-  <div><p class="nv-kicker"><span class="nv-red-dot"></span> Your personal collection</p><h1>My Garage.</h1></div>
-  <p>Your favourites. Your dream order.<br>One place to compare the cars you love.</p>
-</header>
-{% if cars %}
-<div class="nv-garage-toolbar">
-  <div><strong>{{ cars|length }} saved {{ 'car' if cars|length == 1 else 'cars' }}</strong><p>Choose a position and save to change your ranking. #1 is your dream car.</p></div>
-  <a class="nv-text-link" href="{{ url_for('collection.index') }}#catalogue">Find more cars →</a>
-</div>
-<form id="garage-compare" class="nv-compare-controls" method="get" action="{{ url_for('garage.compare') }}">
-  <div><strong>Compare your favourites</strong><p id="compare-help" data-compare-status aria-live="polite">Select 2–4 cars below to compare their specifications.</p></div>
-  <button class="nv-button" type="submit" data-compare-submit>Compare selected →</button>
-</form>
-<ol class="nv-garage-grid" aria-label="Dream-car ranking">
-{% for car in cars %}
-{% set rank = loop.index %}
-<li class="nv-garage-card">
-  <div class="nv-garage-card-top"><span class="nv-rank{% if rank == 1 %} nv-rank-dream{% endif %}">#{{ rank }}{% if rank == 1 %} · Dream car{% endif %}</span><label class="nv-compare-pick"><input type="checkbox" name="car" value="{{ car.slug }}" form="garage-compare" aria-describedby="compare-help" data-compare-car> Compare<span class="nv-sr-only"> {{ gallery_brands[car.brand].name }} {{ car.name }}</span></label></div>
-  <a class="nv-card-link" href="{{ url_for('collection.car', car_slug=car.slug) }}">{{ photo(car, gallery_assets) }}<div class="nv-card-body"><p class="nv-kicker">{{ gallery_brands[car.brand].name }} <span>{{ car.year }}</span></p><h2>{{ car.name }}</h2><p class="nv-card-variant">{{ car.variant }}</p><div class="nv-card-specs"><span><strong>{{ '{:,}'.format(car.power) }}</strong> PS{% if car.powertrain == 'Plug-in hybrid' %} combined{% endif %}</span><span>{{ car.character }}</span></div></div></a>
-  <div class="nv-garage-actions">
-    <form class="nv-rank-form" method="post" action="{{ url_for('garage.rank', car_slug=car.slug) }}">
-      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-      <label for="rank-{{ car.slug }}">Dream rank<span class="nv-sr-only"> for {{ car.name }}</span></label>
-      <div><select id="rank-{{ car.slug }}" name="position">{% for position in range(1, cars|length + 1) %}<option value="{{ position }}"{% if position == rank %} selected{% endif %}>#{{ position }}{% if position == 1 %} · Dream car{% endif %}</option>{% endfor %}</select><button class="nv-small-button" type="submit" aria-label="Save ranking for {{ car.name }}">Save rank</button></div>
-    </form>
-    <form method="post" action="{{ url_for('garage.remove', car_slug=car.slug) }}">
-      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-      <button class="nv-favourite is-saved" type="submit" aria-label="Remove {{ car.name }} from favourites"><span aria-hidden="true">♥</span> Remove favourite</button>
+<section class="nv-garage" aria-labelledby="garage-title">
+  <header class="nv-garage-heading">
+    <div>
+      <p class="nv-kicker">Your personal collection</p>
+      <h1 id="garage-title">My Garage<span>.</span></h1>
+      <p>The cars you love. In the order you dream about them.</p>
+    </div>
+    <a class="nv-garage-browse" href="{{ url_for('collection.index') }}#catalogue">Find more cars <span aria-hidden="true">↗</span></a>
+  </header>
+
+  {% if garage_saved %}
+  <div class="nv-garage-toolbar">
+    <div>
+      <h2>{{ garage_saved|length }} {{ 'favourite' if garage_saved|length == 1 else 'favourites' }}</h2>
+      <p id="garage-compare-hint">{% if garage_saved|length < 2 %}Save one more car to start comparing.{% else %}Select 2–4 cars to compare their specifications.{% endif %}</p>
+    </div>
+    <form id="garage-compare" action="{{ url_for('garage.compare') }}" method="get">
+      <button class="nv-garage-button nv-garage-primary" type="submit" aria-describedby="garage-compare-hint"{% if garage_saved|length < 2 %} disabled{% endif %}>Compare selected <span aria-hidden="true">↗</span></button>
     </form>
   </div>
-</li>
-{% endfor %}
-</ol>
-{% else %}
-<section class="nv-empty nv-garage-empty" aria-labelledby="empty-garage-title"><span class="nv-empty-heart" aria-hidden="true">♡</span><p class="nv-kicker">Start with a favourite</p><h2 id="empty-garage-title">Your dream garage starts here.</h2><p>Save cars from the collection, rank your favourites and compare their specifications side by side.</p><a class="nv-button" href="{{ url_for('collection.index') }}#catalogue">Explore the collection →</a></section>
-{% endif %}
+  <p class="nv-garage-rank-hint">Your ranking starts at <strong>#1 — your dream car.</strong> Choose a position and select “Update” to move a car.</p>
+
+  <ol class="nv-garage-grid" aria-label="Your dream-car ranking">
+    {% for saved in garage_saved %}
+    {% set car = saved.car %}
+    <li class="nv-garage-card{% if saved.rank == 1 %} nv-garage-dream{% endif %}">
+      <div class="nv-garage-card-top">
+        <span class="nv-garage-position">#{{ saved.rank }}{% if saved.rank == 1 %}<span>Dream car</span>{% endif %}</span>
+        <label class="nv-garage-compare-check">
+          <input type="checkbox" name="car" value="{{ car.slug }}" form="garage-compare" aria-describedby="garage-compare-hint" data-compare-car>
+          <span>Compare<span class="nv-sr-only"> {{ gallery_brands[car.brand].name }} {{ car.name }}</span></span>
+        </label>
+      </div>
+      <a class="nv-garage-car-link" href="{{ url_for('collection.car', car_slug=car.slug) }}">
+        {{ photo(car, gallery_assets) }}
+        <div class="nv-garage-card-copy">
+          <p class="nv-kicker">{{ gallery_brands[car.brand].name }} <span>{{ car.year }}</span></p>
+          <h2>{{ car.name }} <span aria-hidden="true">↗</span></h2>
+          <p class="nv-garage-variant">{{ car.variant }}</p>
+          <p class="nv-garage-spec">{{ '{:,}'.format(car.power) }} PS{% if car.powertrain == 'Plug-in hybrid' %} combined{% endif %}<span aria-hidden="true"> · </span>{{ car.character }}</p>
+        </div>
+      </a>
+      <div class="nv-garage-card-actions">
+        <form class="nv-garage-rank-form" method="post" action="{{ url_for('garage.rank', car_slug=car.slug) }}">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <input type="hidden" name="next" value="{{ url_for('garage.index') }}">
+          <label for="rank-{{ car.slug }}">Dream rank<span class="nv-sr-only"> for {{ car.name }}</span></label>
+          <div>
+            <select id="rank-{{ car.slug }}" name="position">
+              {% for position in range(1, garage_saved|length + 1) %}
+              <option value="{{ position }}"{% if position == saved.rank %} selected{% endif %}>#{{ position }}{% if position == 1 %} — Dream car{% endif %}</option>
+              {% endfor %}
+            </select>
+            <button class="nv-garage-button" type="submit">Update<span class="nv-sr-only"> {{ car.name }} ranking</span></button>
+          </div>
+        </form>
+        <form class="nv-garage-remove-form" method="post" action="{{ url_for('garage.remove', car_slug=car.slug) }}">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <input type="hidden" name="next" value="{{ url_for('garage.index') }}">
+          <button type="submit">Remove<span class="nv-sr-only"> {{ car.name }} from favourites</span></button>
+        </form>
+      </div>
+    </li>
+    {% endfor %}
+  </ol>
+  {% else %}
+  <div class="nv-garage-empty">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg>
+    <h2 id="empty-garage-title">Every dream garage starts with one car.</h2>
+    <p>Tap a car’s heart to save it here. Then build your ranking and compare your favourites.</p>
+    <a class="nv-garage-button nv-garage-primary" href="{{ url_for('collection.index') }}#catalogue">Explore the collection <span aria-hidden="true">↗</span></a>
+  </div>
+  {% endif %}
+</section>
 {% endblock %}
 {% block scripts %}{{ super() }}<script defer src="{{ url_for('static', filename='garage/garage.js') }}"></script>{% endblock %}

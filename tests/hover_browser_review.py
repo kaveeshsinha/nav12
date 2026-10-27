@@ -85,6 +85,16 @@ def menu_checks(browser):
     triggers.nth(3).hover()
     page.mouse.click(5, 5)
     expect(page.locator('[data-explore-menu][open]')).to_have_count(0)
+    triggers.nth(4).hover()
+    expect(triggers.nth(4)).to_have_attribute('aria-expanded', 'false')
+    triggers.nth(4).click()
+    expect(triggers.nth(4)).to_have_attribute('aria-expanded', 'true')
+    search = page.locator('.nv-search-panel input[type=search]')
+    expect(search).to_be_focused()
+    search.fill('Ferrari')
+    page.locator('.nv-search-panel button[type=submit]').click()
+    page.wait_for_url('**/collection?q=Ferrari#catalogue')
+    expect(page.locator('.nv-card')).to_have_count(1)
     assert not errors, errors
 
     state = context.storage_state()
@@ -102,6 +112,9 @@ def menu_checks(browser):
     assert page.evaluate('document.documentElement.scrollWidth <= innerWidth')
     triggers.nth(1).tap()
     expect(triggers.nth(1)).to_have_attribute('aria-expanded', 'false')
+    triggers.nth(4).tap()
+    expect(triggers.nth(4)).to_have_attribute('aria-expanded', 'true')
+    expect(page.locator('.nv-search-panel input[type=search]')).to_be_focused()
     mobile.close()
 
 

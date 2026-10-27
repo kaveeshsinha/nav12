@@ -146,7 +146,7 @@ class NavigationTests(unittest.TestCase):
         self.assertEqual(response.status_code, 404)
         self.assertIn(b'Explore the collection', response.data)
 
-    def test_four_native_navigation_sections_shared_across_member_pages(self):
+    def test_navigation_sections_and_search_shared_across_member_pages(self):
         self.member()
         routes = ['/dashboard', '/collection', '/engines', '/collection/credits']
         routes += [f'/brands/{slug}' for slug in BRANDS]
@@ -158,9 +158,12 @@ class NavigationTests(unittest.TestCase):
                 self.assertEqual(len(markup.with_class('nv-explore-nav')), 1)
                 self.assertEqual(len(markup.with_class('nv-nav-track')), 1)
                 menus = [(tag, attrs) for tag, attrs in markup.tags if 'data-explore-menu' in attrs]
-                self.assertEqual(len(menus), 4)
+                self.assertEqual(len(menus), 5)
                 self.assertTrue(all(tag == 'details' and attrs.get('name') == 'explore'
                                     for tag, attrs in menus))
+                self.assertIn('data-click-only', menus[-1][1])
+                self.assertTrue(any(tag == 'input' and attrs.get('type') == 'search'
+                                    and attrs.get('name') == 'q' for tag, attrs in markup.tags))
                 self.assertEqual(len(markup.with_class('nv-brands')), 1)
                 self.assertIn("script-src 'self'", response.headers['Content-Security-Policy'])
 

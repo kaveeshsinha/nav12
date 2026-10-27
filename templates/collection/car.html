@@ -1,9 +1,8 @@
 {% extends 'collection/base.html' %}
-{% from 'collection/components.html' import favourite_button with context %}
 {% block gallery_content %}
 <nav class="nv-breadcrumbs" aria-label="Breadcrumb"><a href="{{ url_for('collection.index') }}">Collection</a><span aria-hidden="true">/</span><a href="{{ url_for('collection.brand', brand_slug=brand.slug) }}">{{ brand.name }}</a><span aria-hidden="true">/</span><span aria-current="page">{{ car.name }}</span></nav>
 <header class="nv-model-heading"><p class="nv-kicker">{{ brand.name }} / {{ car.year }} reference</p><h1>{{ car.name }}</h1><p>{{ car.variant }}</p></header>
-<div class="nv-model-save">{{ favourite_button(car) }}<a href="{{ url_for('garage.index') }}">View My Garage →</a></div>
+{% include 'garage/favourite.html' %}
 <div class="nv-model-hero">{{ photo(car, gallery_assets, hero=true) }}<span class="nv-model-caption">{{ car.year }} reference specification · {{ car.body }}</span></div>
 <dl class="nv-performance"><div><dt>{{ 'Combined power' if car.powertrain == 'Plug-in hybrid' else 'Engine power' }}</dt><dd>{{ '{:,}'.format(car.power) }} <small>PS</small></dd></div><div><dt>0–100 km/h</dt><dd{% if car.acceleration == 'Not verified' %} class="nv-unverified"{% endif %}>{{ car.acceleration }}{% if car.acceleration != 'Not verified' %} <small>s</small>{% endif %}</dd></div><div><dt>Top speed</dt><dd>{{ car.speed }} <small>km/h</small></dd></div><div><dt>Powertrain</dt><dd class="nv-powertrain-value">{{ car.powertrain }}</dd></div></dl>
 <nav class="nv-section-nav" aria-label="Model sections"><a href="#overview">Overview</a><a href="#gallery">Gallery</a><a href="#engineering">Engineering</a><a href="#specifications">Specifications</a><a href="#sources">Sources</a></nav>

@@ -126,6 +126,11 @@ class GarageTests(unittest.TestCase):
             self.assertIn(CARS[slug]['name'].encode(), response.data)
         self.assertIn(b'/garage/remove/', response.data)
         self.assertIn(b'/garage/rank/', response.data)
+        self.assertIn(b'name="position"', response.data)
+        self.assertIn(b'My Garage <span class="nv-garage-count">3</span>', response.data)
+        collection = self.client.get('/collection')
+        self.assertIn(b'nv-favourite-button is-saved', collection.data)
+        self.assertIn(b'/garage/remove/', collection.data)
 
     def test_mutations_require_post_csrf_and_login(self):
         self.save()

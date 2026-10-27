@@ -208,6 +208,7 @@
       if (moveFocus) entries[index].trigger.focus({ preventScroll: true });
       entries[index].panel.scrollTop = 0;
       fitPanel();
+      nav.classList.add('nv-nav-open');
       shell.classList.add('is-open');
     }
 
@@ -225,22 +226,27 @@
         panel.classList.remove('is-active');
       });
       shell.classList.remove('is-open');
+      nav.classList.remove('nv-nav-open');
       shell.style.height = '0px';
       if (restoreFocus) trigger.focus({ preventScroll: true });
     }
 
-    const focusable = panel => [...panel.querySelectorAll('a[href], button:not([disabled])')]
+    const focusable = panel => [...panel.querySelectorAll('input:not([disabled]), a[href], button:not([disabled])')]
       .filter(element => !element.closest('[inert], [hidden]') && element.getClientRects().length);
 
-    entries.forEach(({ trigger, panel }, index) => {
+    entries.forEach(({ item, trigger, panel }, index) => {
+      const clickOnly = item.hasAttribute('data-click-only');
       trigger.addEventListener('pointerenter', event => {
-        if (finePointer.matches && event.pointerType !== 'touch') show(index);
+        if (!clickOnly && finePointer.matches && event.pointerType !== 'touch') show(index);
       });
       trigger.addEventListener('click', event => {
         event.preventDefault();
-        const toggle = event.detail === 0 || event.pointerType === 'touch' || !finePointer.matches;
+        const toggle = clickOnly || event.detail === 0 || event.pointerType === 'touch' || !finePointer.matches;
         if (current === index && toggle) close();
-        else show(index);
+        else {
+          show(index);
+          if (clickOnly) focusable(panel)[0]?.focus({ preventScroll: true });
+        }
       });
       trigger.addEventListener('keydown', event => {
         if (event.key === 'ArrowDown' ||

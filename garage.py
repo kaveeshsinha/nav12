@@ -114,8 +114,9 @@ def register_garage(app, login_required):
         if (request.method == 'GET' and not getattr(g, 'garage_read_failed', False)
                 and session.get('username')
                 and (endpoint == 'dashboard' or endpoint.startswith(('collection.', 'garage.')))):
-            return {'saved_car_slugs': set(saved_slugs())}
-        return {'saved_car_slugs': set()}
+            slugs = saved_slugs()
+            return {'saved_car_slugs': set(slugs), 'garage_count': len(slugs)}
+        return {'saved_car_slugs': set(), 'garage_count': 0}
 
     def require_car(car_slug):
         if car_slug not in CARS:
@@ -149,7 +150,8 @@ def register_garage(app, login_required):
     @login_required
     def index():
         cars = [CARS[slug] for slug in saved_slugs() if slug in CARS]
-        return render_template('garage/index.html', title='My Garage', cars=cars)
+        garage_saved = [{'car': car, 'rank': rank} for rank, car in enumerate(cars, 1)]
+        return render_template('garage/index.html', title='My Garage', garage_saved=garage_saved)
 
     @garage.post('/garage/add/<car_slug>')
     @login_required
@@ -178,6 +180,6 @@ def register_garage(app, login_required):
         if (not 2 <= len(slugs) <= 4 or len(set(slugs)) != len(slugs)
                 or any(slug not in owned or slug not in CARS for slug in slugs)):
             abort(400, description='Choose between 2 and 4 different cars from your garage.')
-        return render_template('garage/compare.html', title='Compare saved cars', cars=[CARS[slug] for slug in slugs])
+        return render_template('garage/compare.html', title='Compare saved cars', compare_cars=[CARS[slug] for slug in slugs])
 
     app.register_blueprint(garage)

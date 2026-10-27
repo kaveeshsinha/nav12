@@ -4,8 +4,8 @@
   const form = document.querySelector('#garage-compare');
   if (!form) return;
   const picks = [...document.querySelectorAll('[data-compare-car]')];
-  const status = form.querySelector('[data-compare-status]');
-  const submit = form.querySelector('[data-compare-submit]');
+  const status = document.querySelector('#garage-compare-hint');
+  const submit = form.querySelector('button[type="submit"]');
   const update = () => {
     const count = picks.filter(input => input.checked).length;
     submit.disabled = count < 2 || count > 4;
