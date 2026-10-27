@@ -1,0 +1,27 @@
+{% extends 'auth.html' %}
+{% block body_class %}recovery-page{% endblock %}
+{% block form %}
+<form id="recovery-link-form" method="post" action="{{ url_for('recovery.accept_link', purpose='verify') }}" hidden>
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <input type="hidden" name="token" value="">
+</form>
+<noscript><p class="recovery-note">Enable JavaScript in your browser, then reopen the link from your email.</p></noscript>
+{% if valid %}
+<h2 id="form-title">Confirm your recovery email.</h2>
+<p class="muted">Verify <strong>{{ verification.pending_email }}</strong> for NaV12 username <strong>{{ verification.username }}</strong>.</p>
+<p class="muted">Only confirm if this is the account you intended.</p>
+<form method="post" action="{{ url_for('recovery.verify_email') }}" class="account-form">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <button class="primary" type="submit">Verify email <span aria-hidden="true">↗</span></button>
+</form>
+<p class="recovery-expiry">Verification links expire after 24 hours. You will need to sign in again after confirming.</p>
+{% else %}
+<h2 id="form-title">This link is no longer valid.</h2>
+<p class="muted">It may have expired or already been used. Sign in and open Account security to send a new verification email.</p>
+{% endif %}
+<p class="switch"><a href="{{ url_for('login') }}">Back to login</a></p>
+{% endblock %}
+{% block scripts %}
+{{ super() }}
+<script src="{{ url_for('static', filename='recovery-link.js') }}" defer></script>
+{% endblock %}

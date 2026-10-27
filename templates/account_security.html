@@ -1,0 +1,41 @@
+{% extends 'auth.html' %}
+{% block body_class %}recovery-page{% endblock %}
+{% block form %}
+<h2 id="form-title">Keep your garage yours.</h2>
+<p class="muted">Manage password recovery for {{ profile.username }}.</p>
+<div class="recovery-status">
+  <span class="recovery-status-label">Recovery email</span>
+  {% if profile.email %}
+  <p><strong>{{ profile.email }}</strong></p>
+  <p class="recovery-expiry">Verified · Ready for password recovery</p>
+  {% else %}
+  <p><strong>No verified email yet</strong></p>
+  <p class="recovery-expiry">Add and verify an email before you need to recover your password.</p>
+  {% endif %}
+  {% if profile.pending_email %}
+  <div class="recovery-pending">
+    <span class="recovery-status-label">Awaiting verification</span>
+    <p>{{ profile.pending_email }}</p>
+    <p class="recovery-expiry">Check your inbox and spam folder. To resend, enter this email and your current password below.</p>
+  </div>
+  {% endif %}
+</div>
+{% if mail_ready %}
+<form method="post" action="{{ url_for('recovery.account_security') }}" class="account-form">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <label for="email">{% if profile.email %}New recovery email{% else %}Recovery email{% endif %}</label>
+  <input id="email" name="email" type="email" autocomplete="email" maxlength="254"
+         value="{{ request.form.get('email', profile.pending_email or '') }}"
+         placeholder="you@example.com" aria-describedby="email-help" required>
+  <small id="email-help">{% if profile.email %}Your current recovery email stays active until you verify the new address.{% else %}We will send a link to confirm that this email belongs to you.{% endif %}</small>
+  <label for="current_password">Current password</label>
+  <input id="current_password" name="current_password" type="password" autocomplete="current-password"
+         maxlength="128" required>
+  <button class="primary" type="submit">Send verification email <span aria-hidden="true">↗</span></button>
+</form>
+{% else %}
+<div class="recovery-note" role="status"><p>Email recovery is not available yet. Please try again later.</p></div>
+{% endif %}
+<p class="switch"><a href="{{ url_for('recovery.change_password') }}">Change password ↗</a></p>
+<p class="switch"><a href="{{ url_for('dashboard') }}">Back to your dashboard</a></p>
+{% endblock %}

@@ -65,7 +65,15 @@ python import_users.py /private/path/users.xlsx --apply
 
 The first command previews counts without changing accounts. The second imports them in one transaction. Existing Werkzeug password hashes are copied unchanged so users keep their passwords. Plaintext passwords, malformed rows, and duplicate usernames are rejected. An existing identical account is skipped; a different existing hash aborts the import rather than replacing that account. The workbook is never modified. Do not upload it to GitHub or place it in static/.
 
-## Account password reset
+## Password recovery
+
+Login includes **Forgot password?**. Signed-in users can open **Account security** to add a recovery email (current password required), confirm the verification link, or change their password. Recovery is available only after an address has been verified. Signup and existing usernames remain unchanged.
+
+Reset links are single-use and expire after 30 minutes; verification links expire after 24 hours. Password changes, recovery and successful email verification sign out old sessions on their next request. Users must log in once again after installing this update. Recovery state is stored in the new `account_security` table in the same Neon/PostgreSQL database, or in the existing local SQLite database during development. Startup adds the table without changing existing account or garage rows.
+
+Email delivery requires Resend or SMTP settings. See [PASSWORD-RECOVERY.md](PASSWORD-RECOVERY.md) for configuration, behavior and verification. Change-password works before email delivery is configured.
+
+## Administrator password reset
 
 With the same DATABASE_URL configured:
 
@@ -96,7 +104,7 @@ Tests use disposable development databases and synthetic credentials. They never
 
 ## Source layout
 
-app.py contains Flask routes and session/CSRF behavior; accounts.py contains database transactions; garage.py handles member favourites, rankings and comparisons; collection.py and catalogue/ provide automotive content; templates/ and static/ provide the UI; import_users.py is a private one-time Excel migration tool. openpyxl remains a dependency only for that importer.
+app.py contains Flask routes and session/CSRF behavior; accounts.py contains database transactions; recovery.py and recovery_store.py handle verified email and password recovery; mailer.py provides Resend/SMTP delivery; garage.py handles member favourites, rankings and comparisons; collection.py and catalogue/ provide automotive content; templates/ and static/ provide the UI; import_users.py is a private one-time Excel migration tool. openpyxl remains a dependency only for that importer.
 
 COLLECTION-UPDATE.md, NAVIGATION-UPDATE.md, and docs/ record the earlier UI work; their older Excel storage references are historical. Use this README for current deployment and storage configuration.
 

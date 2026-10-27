@@ -112,9 +112,16 @@ class AccountStore:
         if not valid_username(username) or not isinstance(new_password, str) or not 8 <= len(new_password) <= 128:
             raise ValueError('Provide a username and an 8–128 character password.')
         password_hash = generate_password_hash(new_password)
+        from recovery_store import RecoveryStore
+        recovery = RecoveryStore(self)
+        recovery.initialize()
         with self._write() as connection:
+            user_id = connection.scalar(select(users.c.id).where(users.c.username_key == username.casefold()))
+            if user_id is None:
+                return False
             result = connection.execute(update(users).where(users.c.username_key == username.casefold())
                                         .values(password_hash=password_hash))
+            recovery.invalidate(connection, user_id)
             return result.rowcount == 1
 
     def import_hashes(self, rows, *, apply=False):

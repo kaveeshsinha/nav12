@@ -57,6 +57,8 @@ class GarageTests(unittest.TestCase):
         with self.client.session_transaction() as session:
             session.clear()
             session['username'] = username
+            profile = self.app.extensions['recovery'].snapshot(username)
+            session['auth_version'] = profile['version'] if profile else 0
             session['csrf_token'] = 'Garage-test-token'
 
     def post(self, action, slug, **data):
@@ -167,7 +169,9 @@ class GarageTests(unittest.TestCase):
 
     def test_missing_account_cannot_write(self):
         self.login('DeletedDriver')
-        self.assertEqual(self.post('add', self.slugs[0]).status_code, 403)
+        response = self.post('add', self.slugs[0])
+        self.assertEqual(response.status_code, 303)
+        self.assertEqual(response.location, '/login')
         self.assertEqual(self.store.list_slugs('DeletedDriver'), [])
 
     def test_storage_errors_have_generic_response(self):

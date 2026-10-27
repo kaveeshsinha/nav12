@@ -14,7 +14,7 @@ os.environ['DATA_DIR'] = _storage.name
 os.environ['DATABASE_URL'] = os.environ.get('NAV12_TEST_DATABASE_URL', 'sqlite:///' + str(Path(_storage.name) / 'test.sqlite3'))
 os.environ['APP_ENV'] = 'development'
 
-from app import app
+from app import app, account
 from collection import BRANDS, CARS, ENGINES
 
 
@@ -64,8 +64,10 @@ class NavigationTests(unittest.TestCase):
         self.client = app.test_client()
 
     def member(self):
+        account('NavigationTestDriver', 'Test-password-2026')
         with self.client.session_transaction() as session:
             session['username'] = 'NavigationTestDriver'
+            session['auth_version'] = app.extensions['recovery'].snapshot('NavigationTestDriver')['version']
 
     def markup(self, route):
         response = self.client.get(route)

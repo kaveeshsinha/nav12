@@ -1,0 +1,115 @@
+.forgot-password-link {
+  align-self: flex-end;
+  color: var(--accent);
+  font-size: 12px;
+  margin-top: 12px;
+}
+
+.forgot-password-link:hover,
+.security-nav-link:hover,
+.recovery-page .switch a:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.security-nav-link[aria-current="page"] {
+  color: var(--accent);
+}
+
+.recovery-page .auth-panel {
+  min-width: 0;
+}
+
+.recovery-page .account-form {
+  margin-top: 22px;
+}
+
+.recovery-page .account-form input {
+  min-width: 0;
+}
+
+.recovery-page .recovery-note,
+.recovery-page .recovery-status {
+  padding: 16px 18px;
+  margin: 24px 0;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #ffffff03;
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+
+.recovery-page .recovery-note p,
+.recovery-page .recovery-status p {
+  margin: 5px 0;
+}
+
+.recovery-page .recovery-status-label {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: bold;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+}
+
+.recovery-page .recovery-pending {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.recovery-page .recovery-status strong {
+  font-weight: 600;
+}
+
+.recovery-page .recovery-expiry {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.recovery-page .recovery-back {
+  display: inline-block;
+  margin-top: 8px;
+}
+
+@media (max-width: 800px) {
+  .site-header {
+    flex-wrap: wrap;
+  }
+
+  .site-header > nav {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    min-width: 0;
+    row-gap: 12px;
+  }
+
+  .site-header .member-tag {
+    font-size: 10px;
+    letter-spacing: 1px;
+    padding: 8px 10px;
+  }
+
+  .recovery-page .intro {
+    padding-top: 28px;
+    padding-bottom: 26px;
+  }
+
+  .recovery-page .intro h1 {
+    font-size: 36px;
+  }
+
+  .recovery-page .car-art,
+  .recovery-page .intro-bottom {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .site-header > nav {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}

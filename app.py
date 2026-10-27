@@ -9,7 +9,6 @@ from datetime import timedelta
 from pathlib import Path
 from functools import wraps
 from flask import Flask, abort, flash, redirect, render_template, request, session, url_for
-from werkzeug.security import check_password_hash
 from accounts import AccountStore, StorageUnavailable
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -22,6 +21,7 @@ if production and (not secret or len(secret) < 32):
 os.umask(0o077)
 app.config.update(
     SECRET_KEY=secret or secrets.token_hex(32),
+    PRODUCTION=production,
     SESSION_COOKIE_SECURE=production,
     MAX_USERS=int(os.environ.get('MAX_USERS', '1000')),
     SESSION_COOKIE_HTTPONLY=True,
@@ -73,7 +73,7 @@ def protect_forms():
     if request.method == 'POST':
         supplied = request.form.get('csrf_token', '')
         expected = session.get('csrf_token', '')
-        if not expected or not secrets.compare_digest(supplied, expected):
+        if not expected or not secrets.compare_digest(supplied.encode('utf-8'), expected.encode('utf-8')):
             abort(400, description='Form expired. Reload the page and try again.')
         if request.endpoint in {'login', 'signup'}:
             username = request.form.get('username', '').strip()
@@ -120,15 +120,16 @@ def login():
     if request.method == 'POST':
         username = request.form.get('username', '').strip()
         password = request.form.get('password', '')
-        saved_hash = account(username)
-        if saved_hash is None:
+        profile = app.extensions['recovery'].authenticate(username, password)
+        if profile is None and account(username) is None:
             flash('User not found', 'error')
-        elif not password or len(password) > 128 or not check_password_hash(saved_hash, password):
+        elif profile is None:
             flash('Incorrect credentials', 'error')
         else:
             session.clear()
             session.permanent = True
-            session['username'] = username
+            session['username'] = profile['username']
+            session['auth_version'] = profile['version']
             return redirect(url_for('dashboard'))
     return render_template('login.html', title='Welcome back')
 
@@ -157,9 +158,9 @@ def prevent_cached_accounts(response):
         response.headers['Cache-Control'] = 'no-store'
     response.headers['X-Content-Type-Options'] = 'nosniff'
     response.headers['X-Frame-Options'] = 'DENY'
-    response.headers['Referrer-Policy'] = 'same-origin'
+    response.headers['Referrer-Policy'] = ('no-referrer' if (request.endpoint or '').startswith('recovery.') else 'same-origin')
     # Only pages using local enhancements may execute scripts; never inline code.
-    scripts = ("'self'" if request.endpoint in {'dashboard', 'login', 'signup'}
+    scripts = ("'self'" if request.endpoint in {'dashboard', 'login', 'signup', 'recovery.reset_password', 'recovery.verify_email'}
                or (request.endpoint or '').startswith(('collection.', 'garage.'))
                else "'none'")
     response.headers['Content-Security-Policy'] = (
@@ -210,6 +211,9 @@ try:
 except StorageUnavailable:
     raise RuntimeError('Cannot initialize the account database. Check DATABASE_URL and database availability.') from None
 app.extensions['accounts'] = store
+
+from recovery import register_recovery
+register_recovery(app, login_required)
 
 from garage import register_garage
 register_garage(app, login_required)

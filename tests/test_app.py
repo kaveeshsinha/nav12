@@ -25,8 +25,10 @@ class NaV12Tests(unittest.TestCase):
         return re.search(rb'name="csrf_token" value="([^"]+)"', response.data)[1].decode()
 
     def member(self):
+        account('TestDriver', 'Test-password-2026')
         with self.client.session_transaction() as session:
             session['username'] = 'TestDriver'
+            session['auth_version'] = app.extensions['recovery'].snapshot('TestDriver')['version']
 
     def test_account_lifecycle_hash_duplicate_and_session(self):
         name='LifecycleDriver'

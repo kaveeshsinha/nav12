@@ -6,7 +6,7 @@
   <title>{{ title }} · NaV12</title>
   {% include 'styles.html' %}
   <link rel="icon" href="{{ url_for('static', filename='favicon.svg') }}" type="image/svg+xml">
-  {% block head_extra %}{% endblock %}
+  {% block head_extra %}<link rel="stylesheet" href="{{ url_for('static', filename='recovery.css') }}">{% endblock %}
   {% if session.get('username') %}<link rel="stylesheet" href="{{ url_for('static', filename='garage/garage.css') }}">{% endif %}
 </head>
 <body class="{% block body_class %}{% endblock %}">
@@ -16,6 +16,7 @@
       {% if session.get('username') %}
 
       <span class="member-tag">● DRIVER CONNECTED</span>
+      <a class="security-nav-link" href="{{ url_for('recovery.account_security') }}" {% if (request.endpoint or '') in ('recovery.account_security', 'recovery.change_password') %}aria-current="page"{% endif %}>Account security</a>
 
       <a class="nv-garage-link" href="{{ url_for('garage.index') }}" {% if (request.endpoint or '').startswith('garage.') %}aria-current="page"{% endif %}>My Garage <span class="nv-garage-count">{{ garage_count }}</span></a>
 
