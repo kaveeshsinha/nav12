@@ -1,6 +1,14 @@
 # NaV12
 
-Flask automotive website with car collections, brand previews, engine guides, and secure account storage. Production accounts live in PostgreSQL on Neon. SQLite is used only for local development when DATABASE_URL is unset. Signup and login no longer read or write Excel.
+Flask automotive website with car collections, brand previews, engine guides, personal garages, and secure account storage. Production accounts live in PostgreSQL on Neon. SQLite is used only for local development when DATABASE_URL is unset. Signup and login no longer read or write Excel.
+
+## My Garage and favourites
+
+Signed-in members can save or remove cars from catalogue cards and individual car pages, then open **My Garage** from the header. Choose a position and **Save rank** to reorder favourites; position #1 is the dream car. Select 2–4 saved cars to compare their specifications.
+
+Favourites and ranks are stored in `garage_favourites` in the same database as accounts: Neon PostgreSQL in production, SQLite for local development. Startup creates this additional table automatically using the existing `DATABASE_URL`; no installer or Excel workbook is needed. Existing accounts and password hashes remain intact. Favourites saved by the old local Excel installer are not imported automatically.
+
+The four exploration menus open on hover with one shared panel that moves page content down. Keyboard and touch controls are supported. Login and signup include Show/Hide password controls, and successful login opens the dashboard without a success banner.
 
 ## Local development
 
@@ -37,7 +45,7 @@ gunicorn --workers 1 --threads 1 --bind 0.0.0.0:$PORT --timeout 60 --access-logf
 
 Generate SECRET_KEY locally with python -c "import secrets; print(secrets.token_hex(32))" and paste the result only in Render. Keep the value stable across deployments. Render supplies PORT. DATA_DIR is unnecessary in production.
 
-7. Set Health Check Path to /healthz and deploy. Startup creates the users table if absent; it never drops or empties an existing table. Production refuses to start without an external PostgreSQL DATABASE_URL.
+7. Set Health Check Path to /healthz and deploy. Startup creates the users and garage_favourites tables if absent; it never drops or empties an existing table. Production refuses to start without an external PostgreSQL DATABASE_URL.
 8. Open the HTTPS onrender.com address supplied by Render. Register a test account, log in and out, redeploy, and verify the same account can still log in. Neon holds the accounts outside Render's temporary filesystem.
 
 Alternatively, use the included render.yaml Blueprint. It selects the Free instance, prompts for DATABASE_URL, and generates SECRET_KEY. Do not create a Render Postgres service: this setup uses the existing Neon database.
@@ -88,7 +96,7 @@ Tests use disposable development databases and synthetic credentials. They never
 
 ## Source layout
 
-app.py contains Flask routes and session/CSRF behavior; accounts.py contains database transactions; collection.py and catalogue/ provide automotive content; templates/ and static/ provide the UI; import_users.py is a private one-time Excel migration tool. openpyxl remains a dependency only for that importer.
+app.py contains Flask routes and session/CSRF behavior; accounts.py contains database transactions; garage.py handles member favourites, rankings and comparisons; collection.py and catalogue/ provide automotive content; templates/ and static/ provide the UI; import_users.py is a private one-time Excel migration tool. openpyxl remains a dependency only for that importer.
 
 COLLECTION-UPDATE.md, NAVIGATION-UPDATE.md, and docs/ record the earlier UI work; their older Excel storage references are historical. Use this README for current deployment and storage configuration.
 

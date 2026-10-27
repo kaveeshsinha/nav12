@@ -1,0 +1,57 @@
+/* Personal collection controls share the existing NaV12 palette. */
+.nv-garage-nav { white-space: nowrap; font-weight: 700; }
+.nv-garage-nav[aria-current="page"] { color: var(--accent); }
+.nv-favourite-form { margin: 0; }
+.nv-card > .nv-favourite-form { padding: 0 22px 22px; }
+.nv-favourite, .nv-small-button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 3px; background: transparent; color: var(--text); font: inherit; font-size: 12px; cursor: pointer; }
+.nv-favourite:hover, .nv-small-button:hover { border-color: var(--accent); }
+.nv-favourite span { color: var(--accent); font-size: 20px; line-height: 1; }
+.nv-favourite.is-saved { color: #ff9a9e; }
+.nv-model-save { display: flex; align-items: center; flex-wrap: wrap; gap: 20px; margin: 0 0 24px; font-size: 13px; }
+.nv-garage-toolbar, .nv-compare-controls { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; padding: 24px 0; }
+.nv-garage-toolbar p, .nv-compare-controls p { color: var(--muted); font-size: 13px; margin: 6px 0 0; }
+.nv-compare-controls { padding: 22px 24px; border: 1px solid var(--line); background: var(--panel); margin: 0 0 28px; }
+.nv-compare-controls .nv-button:disabled { cursor: not-allowed; opacity: .45; }
+.nv-garage-grid { list-style: none; padding: 0; margin: 0 0 48px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+.nv-garage-card { min-width: 0; border: 1px solid var(--line); background: var(--panel); display: flex; flex-direction: column; }
+.nv-garage-card .nv-card-link { display: block; height: auto; }
+.nv-garage-card .nv-photo { height: auto; aspect-ratio: 1.62; }
+.nv-card > .nv-card-link { height: auto; }
+.nv-garage-card .nv-card-body { padding: 22px; }
+.nv-garage-card h2 { font-size: 24px; line-height: 1.2; margin: 10px 0; letter-spacing: -.6px; }
+.nv-garage-card-top { padding: 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; font-size: 12px; }
+.nv-rank { color: var(--muted); font-weight: 700; }
+.nv-rank-dream { color: var(--accent); }
+.nv-compare-pick { display: inline-flex; align-items: center; gap: 8px; min-height: 32px; cursor: pointer; }
+.nv-compare-pick input { width: 18px; height: 18px; accent-color: var(--accent); cursor: pointer; }
+.nv-garage-actions { margin-top: auto; padding: 0 22px 22px; }
+.nv-garage-actions form { margin: 0; }
+.nv-rank-form { padding: 16px 0; border-top: 1px solid var(--line); }
+.nv-rank-form label { display: block; margin-bottom: 8px; font-size: 12px; color: var(--muted); }
+.nv-rank-form > div { display: flex; gap: 8px; }
+.nv-rank-form select { min-width: 0; flex: 1; min-height: 44px; background: var(--bg); color: var(--text); border: 1px solid var(--line); padding: 8px; font: inherit; font-size: 12px; }
+.nv-rank-form select:focus-visible, .nv-comparison-scroll:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.nv-garage-empty { margin-bottom: 50px; }
+.nv-empty-heart { color: var(--accent); font-size: 64px; line-height: 1.3; }
+.nv-garage-empty p { max-width: 540px; margin-left: auto; margin-right: auto; }
+.nv-compare-note { color: var(--muted); font-size: 13px; max-width: 780px; }
+.nv-comparison-scroll { position: relative; max-width: 100%; overflow-x: auto; margin: 24px 0 50px; border: 1px solid var(--line); }
+.nv-comparison-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; }
+.nv-comparison-table th, .nv-comparison-table td { vertical-align: top; min-width: 200px; max-width: 320px; padding: 20px; border-bottom: 1px solid var(--line); border-right: 1px solid var(--line); }
+.nv-comparison-table th:first-child { min-width: 165px; width: 165px; color: var(--muted); font-weight: 400; }
+.nv-comparison-table thead th { background: var(--panel); }
+.nv-comparison-table .nv-photo { margin-bottom: 16px; aspect-ratio: 16 / 10; }
+.nv-comparison-table .nv-kicker { display: block; font-size: 10px; }
+.nv-compare-model { display: block; font-size: 20px; line-height: 1.3; margin: 8px 0; }
+.nv-compare-variant { color: var(--muted); font-size: 12px; font-weight: 400; }
+.nv-comparison-table tbody tr:nth-child(even) { background: #ffffff03; }
+.nv-comparison-table td a { color: #ff9a9e; text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 1000px) { .nv-garage-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 650px) {
+  .site-header { flex-wrap: wrap; }
+  .site-header nav { flex-wrap: wrap; gap: 12px; }
+  .site-header .member-tag { display: none; }
+  .nv-garage-grid { grid-template-columns: 1fr; }
+  .nv-compare-controls { padding: 18px; }
+  .nv-compare-controls .nv-button { width: 100%; justify-content: center; }
+}

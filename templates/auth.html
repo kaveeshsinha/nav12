@@ -14,3 +14,5 @@
   </section>
 </section>
 {% endblock %}
+{% block head_extra %}<link rel="stylesheet" href="{{ url_for('static', filename='password-toggle.css') }}">{% endblock %}
+{% block scripts %}<script defer src="{{ url_for('static', filename='password-toggle.js') }}"></script>{% endblock %}

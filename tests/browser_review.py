@@ -35,8 +35,8 @@ with sync_playwright() as p:
     page.on('console',lambda message:report['errors'].append(message.text) if message.type=='error' else None)
     page.on('requestfailed',lambda request:report['failed_requests'].append(request.url))
     username=f'Review{int(time.time())}'
-    page.goto(BASE+'/signup');page.locator('[name=username]').fill(username);page.locator('[name=password]').fill('Disposable-review-2026');page.locator('.account-form button').click()
-    page.locator('[name=username]').fill(username);page.locator('[name=password]').fill('Disposable-review-2026');page.locator('.account-form button').click()
+    page.goto(BASE+'/signup');page.locator('[name=username]').fill(username);page.locator('[name=password]').fill('Disposable-review-2026');page.locator('.account-form button[type=submit]').click()
+    page.locator('[name=username]').fill(username);page.locator('[name=password]').fill('Disposable-review-2026');page.locator('.account-form button[type=submit]').click()
     assert page.url.endswith('/dashboard');assert page.locator('svg.v12-pro').count()==1
     passed('Browser signup, login, dashboard and preserved inline V12 SVG')
     screenshot(page,'after-dashboard')

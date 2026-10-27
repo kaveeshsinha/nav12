@@ -7,6 +7,7 @@
   {% include 'styles.html' %}
   <link rel="icon" href="{{ url_for('static', filename='favicon.svg') }}" type="image/svg+xml">
   {% block head_extra %}{% endblock %}
+  {% if session.get('username') %}<link rel="stylesheet" href="{{ url_for('static', filename='garage/garage.css') }}">{% endif %}
 </head>
 <body class="{% block body_class %}{% endblock %}">
   <header class="site-header">
@@ -14,6 +15,7 @@
     <nav aria-label="Main navigation">
       {% if session.get('username') %}
 
+      <a class="nv-garage-nav" href="{{ url_for('garage.index') }}" {% if (request.endpoint or '').startswith('garage.') %}aria-current="page"{% endif %}>My Garage</a>
       <span class="member-tag">● DRIVER CONNECTED</span>
 
       <form method="post" action="{{ url_for('logout') }}">

@@ -1,4 +1,4 @@
-"""Read-only vehicle catalogue; deliberately independent of Excel account storage."""
+"""Read-only vehicle catalogue, independent of account storage."""
 import json
 from pathlib import Path
 from flask import Blueprint, abort, render_template, request
@@ -30,7 +30,7 @@ def register_collection(app, login_required):
 
     @app.context_processor
     def collection_context():
-        if request.endpoint == 'dashboard' or (request.endpoint or '').startswith('collection.'):
+        if request.endpoint == 'dashboard' or (request.endpoint or '').startswith(('collection.', 'garage.')):
             return dict(gallery_brands=BRANDS, gallery_cars=CARS, cars_by_brand=BY_BRAND,
                         gallery_assets=ASSETS, engine_types=ENGINES, cars_by_engine=BY_ENGINE,
                         nav_characters=CHARACTERS, nav_powertrains=POWERTRAINS)

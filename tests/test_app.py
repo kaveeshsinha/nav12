@@ -1,4 +1,4 @@
-"""Run: python -m unittest discover -s tests -v. Never opens the real workbook."""
+"""Run: python -m unittest discover -s tests -v. Uses disposable database storage."""
 import os
 import re
 import json
@@ -42,6 +42,7 @@ class NaV12Tests(unittest.TestCase):
         self.assertIn(b'Incorrect credentials',bad.data)
         response=self.client.post('/login',data={'csrf_token':self.token(),'username':name,'password':'Test-password-2026'})
         self.assertEqual(response.location,'/dashboard')
+        self.assertNotIn(b'Successfully logged in', self.client.get('/dashboard').data)
         self.assertEqual(self.client.get('/collection').status_code,200)
         token=self.token('/dashboard')
         self.assertEqual(self.client.post('/logout',data={'csrf_token':token}).status_code,302)
@@ -102,9 +103,11 @@ class NaV12Tests(unittest.TestCase):
         self.assertIn(b'value="812"',self.client.get('/collection?q=812').data)
         self.assertNotIn(b'<script>alert(1)',self.client.get('/collection?q=%3Cscript%3Ealert(1)').data)
 
-    def test_csp_only_expanded_for_gallery_pages(self):
-        for path in ('/login','/signup','/healthz'):
+    def test_csp_only_expanded_for_enhanced_pages(self):
+        for path in ('/healthz',):
             self.assertIn("script-src 'none'",self.client.get(path).headers['Content-Security-Policy'])
+        for path in ('/login', '/signup'):
+            self.assertIn("script-src 'self'", self.client.get(path).headers['Content-Security-Policy'])
         self.member()
         response=self.client.get('/collection')
         csp=response.headers['Content-Security-Policy']

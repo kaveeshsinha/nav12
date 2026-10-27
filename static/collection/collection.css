@@ -213,16 +213,18 @@
   color: var(--nv-muted);
 }
 .nv-shared-menu {
-  position: fixed;
+  position: relative;
+  width: 100%;
+  overflow: hidden;
   z-index: 1100;
   height: 0;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
   background: #1c2022;
-  border: 1px solid #434849;
+  border: 0;
   border-radius: 0 0 20px 20px;
-  box-shadow: 0 24px 60px #0008;
+  box-shadow: inset 0 0 0 1px #434849;
   transition: height 300ms cubic-bezier(.22,.8,.25,1),
               opacity 180ms ease, visibility 0s linear 300ms;
 }
@@ -274,15 +276,4 @@
 @media (prefers-reduced-motion: reduce) {
   .nv-shared-menu,
   .nv-shared-menu > .nv-explore-panel { transition: none; }
-}
-
-/* Let the shared menu push the page content down. */
-.nv-shared-menu {
-    position: relative;
-    inset: auto;
-    width: 100%;
-    max-width: none;
-    overflow: hidden;
-    border: 0;
-    box-shadow: inset 0 0 0 1px #434849;
 }

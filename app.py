@@ -129,7 +129,6 @@ def login():
             session.clear()
             session.permanent = True
             session['username'] = username
-            flash('Successfully logged in', 'success')
             return redirect(url_for('dashboard'))
     return render_template('login.html', title='Welcome back')
 
@@ -159,8 +158,10 @@ def prevent_cached_accounts(response):
     response.headers['X-Content-Type-Options'] = 'nosniff'
     response.headers['X-Frame-Options'] = 'DENY'
     response.headers['Referrer-Policy'] = 'same-origin'
-    # Only gallery-enabled member pages may execute our local enhancement script.
-    scripts = "'self'" if request.endpoint == 'dashboard' or (request.endpoint or '').startswith('collection.') else "'none'"
+    # Only pages using local enhancements may execute scripts; never inline code.
+    scripts = ("'self'" if request.endpoint in {'dashboard', 'login', 'signup'}
+               or (request.endpoint or '').startswith(('collection.', 'garage.'))
+               else "'none'")
     response.headers['Content-Security-Policy'] = (
         "default-src 'self'; style-src 'self' 'unsafe-inline'; "
         f"img-src 'self'; script-src {scripts}; object-src 'none'; "
@@ -209,6 +210,9 @@ try:
 except StorageUnavailable:
     raise RuntimeError('Cannot initialize the account database. Check DATABASE_URL and database availability.') from None
 app.extensions['accounts'] = store
+
+from garage import register_garage
+register_garage(app, login_required)
 
 
 if __name__ == '__main__':

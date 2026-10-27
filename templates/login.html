@@ -7,7 +7,10 @@
   <label for="username">Username</label>
   <input id="username" name="username" placeholder="Your username" autocomplete="username" maxlength="30" value="{{ request.form.get('username', '') }}" required>
   <label for="password">Password</label>
-  <input id="password" name="password" type="password" placeholder="Your password" autocomplete="current-password" maxlength="128" required>
+  <div class="password-field">
+    <input id="password" name="password" type="password" placeholder="Your password" autocomplete="current-password" maxlength="128" required>
+    <button class="password-toggle" type="button" data-password-toggle aria-controls="password" aria-pressed="false" aria-label="Show password" hidden>Show</button>
+  </div>
   <button class="primary" type="submit">Enter your garage <span>↗</span></button>
 </form>
 <p class="switch">New to NaV12? <a href="{{ url_for('signup') }}">Create an account</a></p>

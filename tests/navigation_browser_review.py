@@ -95,11 +95,11 @@ with sync_playwright() as playwright:
         page.goto(BASE + '/signup')
         page.locator('[name=username]').fill(username)
         page.locator('[name=password]').fill(password)
-        page.locator('.account-form button').click()
+        page.locator('.account-form button[type=submit]').click()
         page.wait_for_url(BASE + '/login')
         page.locator('[name=username]').fill(username)
         page.locator('[name=password]').fill(password)
-        page.locator('.account-form button').click()
+        page.locator('.account-form button[type=submit]').click()
         page.wait_for_url(BASE + '/dashboard')
         assert page.locator('svg.v12-pro').count() == 1
         check_nav_row(page, 'dashboard')

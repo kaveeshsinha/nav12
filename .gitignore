@@ -11,3 +11,6 @@ work/
 *.sqlite3-*
 .env.*
 !.env.example
+
+.venv*/
+garage-backups/

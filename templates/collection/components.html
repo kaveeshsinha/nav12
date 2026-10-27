@@ -16,6 +16,15 @@
 </div>
 {%- endmacro %}
 
+{% macro favourite_button(car) -%}
+{% set saved = car.slug in saved_car_slugs %}
+<form class="nv-favourite-form" method="post" action="{{ url_for('garage.remove' if saved else 'garage.add', car_slug=car.slug) }}">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <input type="hidden" name="next" value="{{ request.full_path.rstrip('?') }}">
+  <button class="nv-favourite{% if saved %} is-saved{% endif %}" type="submit" aria-label="{{ 'Remove ' ~ car.name ~ ' from favourites' if saved else 'Save ' ~ car.name ~ ' to favourites' }}"><span aria-hidden="true">{{ '♥' if saved else '♡' }}</span> {{ 'Remove favourite' if saved else 'Save to My Garage' }}</button>
+</form>
+{%- endmacro %}
+
 {% macro card(car, brands, assets) -%}
 <article class="nv-card">
   <a class="nv-card-link" href="{{ url_for('collection.car', car_slug=car.slug) }}">
@@ -25,6 +34,7 @@
     <p class="nv-card-variant">{{ car.variant }}</p>
     <div class="nv-card-specs"><span><strong>{{ '{:,}'.format(car.power) }}</strong> PS{% if car.powertrain == 'Plug-in hybrid' %} combined{% endif %}</span>{% if car.acceleration != 'Not verified' %}<span><strong>{{ car.acceleration }}</strong> s · 0–100</span>{% endif %}<span>{{ car.character }}</span></div></div>
   </a>
+  {{ favourite_button(car) }}
 </article>
 {%- endmacro %}
 

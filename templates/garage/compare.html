@@ -1,0 +1,17 @@
+{% extends 'collection/base.html' %}
+{% block gallery_content %}
+<header class="nv-page-heading"><div><p class="nv-kicker">Your shortlist / side by side</p><h1>Compare favourites.</h1></div><a class="nv-text-link" href="{{ url_for('garage.index') }}">← Back to My Garage</a></header>
+<p class="nv-compare-note" id="comparison-help">Manufacturer specifications for the listed reference year and variant. PS is metric horsepower; hybrid power is combined output. Scroll across the table on smaller screens.</p>
+<div class="nv-comparison-scroll" role="region" tabindex="0" aria-label="Saved car comparison" aria-describedby="comparison-help">
+<table class="nv-comparison-table">
+  <caption class="nv-sr-only">Specifications for {{ cars|length }} saved cars</caption>
+  <thead><tr><th scope="col">Specification</th>{% for car in cars %}<th scope="col"><a href="{{ url_for('collection.car', car_slug=car.slug) }}">{{ photo(car, gallery_assets) }}<span class="nv-kicker">{{ gallery_brands[car.brand].name }}</span><strong class="nv-compare-model">{{ car.name }}</strong><span class="nv-compare-variant">{{ car.variant }}</span></a></th>{% endfor %}</tr></thead>
+  <tbody>
+  {% for label, key in [('Reference year', 'year'), ('Body style', 'body'), ('Character', 'character'), ('Powertrain', 'powertrain'), ('Engine', 'engine'), ('Displacement', 'displacement'), ('Power (PS)', 'power'), ('Power reference', 'power_note'), ('Torque', 'torque'), ('Transmission', 'transmission'), ('Driven wheels', 'drive'), ('0–100 km/h (s)', 'acceleration'), ('Top speed (km/h)', 'speed')] %}
+    <tr><th scope="row">{{ label }}</th>{% for car in cars %}<td>{{ car[key] }}</td>{% endfor %}</tr>
+  {% endfor %}
+    <tr><th scope="row">Manufacturer source</th>{% for car in cars %}<td><a href="{{ car.source }}" target="_blank" rel="noopener noreferrer">View source ↗<span class="nv-sr-only"> for {{ car.name }} (opens a new tab)</span></a></td>{% endfor %}</tr>
+  </tbody>
+</table>
+</div>
+{% endblock %}
