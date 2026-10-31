@@ -13,6 +13,7 @@
   <header class="site-header">
       <a class="logo" href="{{ url_for('index') }}">NaV<span>12</span></a>
     <nav aria-label="Main navigation">
+      <a class="engine-nav-link" href="{{ url_for('engine') }}" {% if request.endpoint == 'engine' %}aria-current="page"{% endif %}>Engine study</a>
       {% if session.get('username') %}
 
       <span class="member-tag">● DRIVER CONNECTED</span>
