@@ -140,6 +140,12 @@ def dashboard():
     return render_template('dashboard.html', title='Your garage')
 
 
+@app.get('/engine')
+def engine():
+    """Public, cinematic introduction to NaV12's V12 engine study."""
+    return render_template('engine.html', title='The V12 Engine Study')
+
+
 # Catalogue registration does not alter account or storage configuration.
 from collection import register_collection
 register_collection(app, login_required)
@@ -160,7 +166,7 @@ def prevent_cached_accounts(response):
     response.headers['X-Frame-Options'] = 'DENY'
     response.headers['Referrer-Policy'] = ('no-referrer' if (request.endpoint or '').startswith('recovery.') else 'same-origin')
     # Only pages using local enhancements may execute scripts; never inline code.
-    scripts = ("'self'" if request.endpoint in {'dashboard', 'login', 'signup', 'recovery.reset_password', 'recovery.verify_email'}
+    scripts = ("'self'" if request.endpoint in {'dashboard', 'engine', 'login', 'signup', 'recovery.reset_password', 'recovery.verify_email'}
                or (request.endpoint or '').startswith(('collection.', 'garage.'))
                else "'none'")
     response.headers['Content-Security-Policy'] = (

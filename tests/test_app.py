@@ -85,11 +85,12 @@ class NaV12Tests(unittest.TestCase):
             self.assertEqual(response.status_code,404)
             self.assertIn(b'Explore the collection',response.data)
 
-    def test_dashboard_svg_preserved_and_collection_link_works(self):
+    def test_dashboard_engine_study_and_collection_link_work(self):
         self.member()
         response=self.client.get('/dashboard')
-        self.assertIn(b'class="v12-pro"',response.data)
-        self.assertIn(b'url(#metalTop)',response.data)
+        self.assertIn(b'nv-engine-teaser',response.data)
+        self.assertIn(b'engine/engine-teaser.webp',response.data)
+        self.assertIn(b'href="/engine"',response.data)
         self.assertIn(b'href="/collection"',response.data)
         self.assertIn(b'800 PS',response.data)
 
